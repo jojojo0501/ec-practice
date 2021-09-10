@@ -80,11 +80,11 @@
 					<tbody>
 						<tr th:each="threeItemList:${wrapperItemList}">
 							<th th:each="item:${threeItemList}">
-								<a href="item_detail.html">
+								<a href="item_detail.html" th:href="@{/detail?id=}+${item.id}">
 									<img src="../static/img_pizza/1.jpg" th:src="@{/img_pizza/}+${item.imagePath}"
 										class="img-responsive img-rounded item-img-center" width="200" height="600">
 								</a><br>
-								<a href="item_detail.html" th:text="${item.name}">じゃがバターベーコン</a><br>
+								<a href="item_detail.html" th:href="@{/detail?id=}+${item.id}" th:text="${item.name}">じゃがバターベーコン</a><br>
 								<span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${#numbers.formatInteger(item.priceM,2,'COMMA')}">1,380</span>円(税抜)<br>
 								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${#numbers.formatInteger(item.priceL,2,'COMMA')}">2,380</span>円(税抜)<br>
 							</th>

@@ -16,26 +16,28 @@ import jp.co.example.domain.Item;
 public class ItemRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
-	
+
 	/**
 	 * Itemオブジェクトを生成するローマッパー.
 	 */
 	private static final RowMapper<Item> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(Item.class);
-	
+
 	/**
 	 * 全件検索します.
+	 * 
 	 * @return 全件の情報が格納されたリスト.
 	 */
-	public List<Item> findAll(){
+	public List<Item> findAll() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
 		sql.append(" FROM items;");
 		List<Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
 		return itemList;
 	}
-	
+
 	/**
 	 * 主キー検索をします.
+	 * 
 	 * @param itemId itemのid
 	 * @return アイテム
 	 */
@@ -47,5 +49,5 @@ public class ItemRepository {
 		Item item = template.queryForObject(sql.toString(), param, ITEM_ROW_MAPPER);
 		return item;
 	}
-	
+
 }

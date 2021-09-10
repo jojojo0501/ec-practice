@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.domain.Item;
 import jp.co.example.service.ItemService;
+import jp.co.example.service.ToppingService;
 
 @Controller
 @RequestMapping("/")
@@ -17,6 +18,9 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	private ToppingService toppingService;
 	
 	/**
 	 * 商品一覧画面を表示します.
@@ -49,6 +53,7 @@ public class ItemController {
 	@RequestMapping("/detail")
 	public String showDetail(Integer id,Model model) {
 		Item item = itemService.showDetail(id);
+		item.setToppingList(toppingService.searchAll());
 		model.addAttribute("item", item);
 		return "item_detail";
 	}
