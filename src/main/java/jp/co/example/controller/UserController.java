@@ -106,6 +106,7 @@ public class UserController {
 	 * ログアウト処理を行います.
 	 * @return 商品一覧画面へフォワードします
 	 */
+	@RequestMapping("/logout")
 	public String logout() {
 		session.invalidate();
 		return "redirect:/";
