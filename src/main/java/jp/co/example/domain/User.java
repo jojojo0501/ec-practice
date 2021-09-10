@@ -4,6 +4,7 @@ public class User {
 	private Integer id;
 	private String name;
 	private String email;
+	private String password;
 	private String zipcode;
 	private String address;
 	private String telephone;
@@ -56,9 +57,17 @@ public class User {
 		this.telephone = telephone;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", zipcode=" + zipcode + ", address="
-				+ address + ", telephone=" + telephone + "]";
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", zipcode="
+				+ zipcode + ", address=" + address + ", telephone=" + telephone + "]";
 	}
 }
