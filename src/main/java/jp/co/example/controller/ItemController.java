@@ -39,4 +39,17 @@ public class ItemController {
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}
+	
+	/**
+	 * 商品詳細画面を表示します.
+	 * @param id 商品ID
+	 * @param model リクエストスコープに商品情報を格納する。
+	 * @return　商品詳細ページへフォワードする。
+	 */
+	@RequestMapping("/detail")
+	public String showDetail(Integer id,Model model) {
+		Item item = itemService.showDetail(id);
+		model.addAttribute("item", item);
+		return "item_detail";
+	}
 }

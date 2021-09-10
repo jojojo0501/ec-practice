@@ -14,13 +14,24 @@ import jp.co.example.repository.ItemRepository;
 public class ItemService {
 	@Autowired
 	private ItemRepository itemRepository;
-	
+
 	/**
 	 * 全商品を検索します.
+	 * 
 	 * @return 全商品が格納されたリスト
 	 */
-	public List<Item> searchAllItem(){
+	public List<Item> searchAllItem() {
 		List<Item> itemList = itemRepository.findAll();
 		return itemList;
 	}
+
+	/**
+	 * 商品を主キー検索します.
+	 * @param itemId 主キー検索する商品Id
+	 * @return 商品情報
+	 */
+	public Item showDetail(Integer itemId) {
+			return itemRepository.load(itemId);
+		}
+
 }
