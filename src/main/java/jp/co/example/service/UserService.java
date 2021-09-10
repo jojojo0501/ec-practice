@@ -32,4 +32,14 @@ public class UserService {
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
+	
+	/**
+	 * メールアドレスとパスワードよりユーザーを検索します.
+	 * @param email　メールアドレス
+	 * @param password パスワード
+	 * @return ユーザー情報
+	 */
+	public User searchByEmailAndPassword(String email,String password) {
+		return userRepository.findByEmailAndPassword(email, password);
+	}
 }

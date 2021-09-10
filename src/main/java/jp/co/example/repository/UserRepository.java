@@ -60,4 +60,21 @@ public class UserRepository {
 		}
 		return userList.get(0);
 	};
+	
+	/**
+	 * メールアドレスとパスワードよりユーザーを検索します.
+	 * @param email メールアドレス
+	 * @param password　パスワード
+	 * @return ユーザー情報
+	 */
+	public User findByEmailAndPassword(String email,String password) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,email,password,zipcode,address,telephone from users WHERE email=:email AND password=:password;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("email", email).addValue("password", password);
+		List<User> userList = template.query(sql.toString(), param, USER_ROW_MAPPER);
+		if (userList.size() == 0) {
+			return null;
+		}
+		return userList.get(0);
+	};
 }
