@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import jp.co.example.domain.Item;
 import jp.co.example.repository.ItemRepository;
@@ -39,8 +40,13 @@ public class ItemService {
 	 * @param name 名前
 	 * @return 商品情報
 	 */
-	public List<Item> searchByLikeName(String name){
-		return itemRepository.findByLikeName(name);
+	public List<Item> searchByLikeName(String name,Model model){
+		List<Item> itemList = itemRepository.findByLikeName(name);
+		if(itemList == null) {
+			itemList = itemRepository.findAll();
+			model.addAttribute("noItemMessage", "該当する商品がありません。");
+		}
+		return itemList;
 	}
 
 }
