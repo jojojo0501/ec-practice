@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import jp.co.example.domain.Item;
 import jp.co.example.repository.ItemRepository;
@@ -28,24 +27,22 @@ public class ItemService {
 
 	/**
 	 * 商品を主キー検索します.
+	 * 
 	 * @param itemId 主キー検索する商品Id
 	 * @return 商品情報
 	 */
 	public Item showDetail(Integer itemId) {
-			return itemRepository.load(itemId);
-		}
-	
+		return itemRepository.load(itemId);
+	}
+
 	/**
 	 * 引数で受け取った名前をもとに曖昧検索を行います.
+	 * 
 	 * @param name 名前
 	 * @return 商品情報
 	 */
-	public List<Item> searchByLikeName(String name,Model model){
+	public List<Item> searchByLikeName(String name) {
 		List<Item> itemList = itemRepository.findByLikeName(name);
-		if(itemList == null) {
-			itemList = itemRepository.findAll();
-			model.addAttribute("noItemMessage", "該当する商品がありません。");
-		}
 		return itemList;
 	}
 
