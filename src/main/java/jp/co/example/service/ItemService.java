@@ -33,5 +33,14 @@ public class ItemService {
 	public Item showDetail(Integer itemId) {
 			return itemRepository.load(itemId);
 		}
+	
+	/**
+	 * 引数で受け取った名前をもとに曖昧検索を行います.
+	 * @param name 名前
+	 * @return 商品情報
+	 */
+	public List<Item> searchByLikeName(String name){
+		return itemRepository.findByLikeName(name);
+	}
 
 }
