@@ -30,7 +30,7 @@ public class ItemRepository {
 	public List<Item> findAll() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
-		sql.append(" FROM items;");
+		sql.append(" FROM items ORDER BY id;");
 		List<Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
 		return itemList;
 	}
@@ -48,6 +48,21 @@ public class ItemRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", itemId);
 		Item item = template.queryForObject(sql.toString(), param, ITEM_ROW_MAPPER);
 		return item;
+	}
+
+	/**
+	 * 引数で受け取った名前をもとに曖昧検索します.
+	 * 
+	 * @param name 名前
+	 * @return 商品情報
+	 */
+	public List<Item> findByLikeName(String name) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
+		sql.append(" FROM items WHERE name LIKE :name ORDER BY id;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_ROW_MAPPER);
+		return itemList;
 	}
 
 }
