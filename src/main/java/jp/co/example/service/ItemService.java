@@ -27,11 +27,23 @@ public class ItemService {
 
 	/**
 	 * 商品を主キー検索します.
+	 * 
 	 * @param itemId 主キー検索する商品Id
 	 * @return 商品情報
 	 */
 	public Item showDetail(Integer itemId) {
-			return itemRepository.load(itemId);
-		}
+		return itemRepository.load(itemId);
+	}
+
+	/**
+	 * 引数で受け取った名前をもとに曖昧検索を行います.
+	 * 
+	 * @param name 名前
+	 * @return 商品情報
+	 */
+	public List<Item> searchByLikeName(String name) {
+		List<Item> itemList = itemRepository.findByLikeName(name);
+		return itemList;
+	}
 
 }
