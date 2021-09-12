@@ -6,6 +6,7 @@ public class OrderItem {
 	private Integer id;
 	private Integer itemId;
 	private Integer orderId;
+	private Integer quantity;
 	private Character size;
 	private Item item;
 	private List<OrderTopping> orderToppingList;
@@ -41,6 +42,9 @@ public class OrderItem {
 	public void setSize(Character size) {
 		this.size = size;
 	}
+	public void setSizeStringFromChar(String size) {
+		this.size = size.charAt(0);
+	}
 
 	public Item getItem() {
 		return item;
@@ -58,9 +62,18 @@ public class OrderItem {
 		this.orderToppingList = orderToppingList;
 	}
 
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
 	@Override
 	public String toString() {
-		return "OrderItem [id=" + id + ", itemId=" + itemId + ", orderId=" + orderId + ", size=" + size + ", item="
-				+ item + ", orderToppingList=" + orderToppingList + "]";
+		return "OrderItem [id=" + id + ", itemId=" + itemId + ", orderId=" + orderId + ", quantity=" + quantity
+				+ ", size=" + size + ", item=" + item + ", orderToppingList=" + orderToppingList + "]";
 	}
 }
