@@ -71,6 +71,12 @@ public class OrderItem {
 		this.quantity = quantity;
 	}
 
+	@Override
+	public String toString() {
+		return "OrderItem [id=" + id + ", itemId=" + itemId + ", orderId=" + orderId + ", quantity=" + quantity
+				+ ", size=" + size + ", item=" + item + ", orderToppingList=" + orderToppingList + "]";
+	}
+
 	/**
 	 * 商品サイズとトッピングの数をもとに商品合計金額（税抜）を算定します.
 	 * 
@@ -88,11 +94,5 @@ public class OrderItem {
 			subTotalPrice += ToppingCount * 300;
 		}
 		return subTotalPrice;
-	}
-
-	@Override
-	public String toString() {
-		return "OrderItem [id=" + id + ", itemId=" + itemId + ", orderId=" + orderId + ", quantity=" + quantity
-				+ ", size=" + size + ", item=" + item + ", orderToppingList=" + orderToppingList + "]";
 	}
 }
