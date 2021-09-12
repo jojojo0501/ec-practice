@@ -42,6 +42,7 @@ public class OrderItem {
 	public void setSize(Character size) {
 		this.size = size;
 	}
+
 	public void setSizeStringFromChar(String size) {
 		this.size = size.charAt(0);
 	}
@@ -62,13 +63,31 @@ public class OrderItem {
 		this.orderToppingList = orderToppingList;
 	}
 
-
 	public Integer getQuantity() {
 		return quantity;
 	}
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	/**
+	 * 商品サイズとトッピングの数をもとに商品合計金額（税抜）を算定します.
+	 * 
+	 * @return 商品合計金額（税抜）
+	 */
+	public Integer getSubTotal() {
+		Integer subTotalPrice = 0;
+		Integer quantity = this.quantity;
+		Integer ToppingCount = this.orderToppingList.size();
+		if (this.size == 'M') {
+			subTotalPrice += this.item.getPriceM() * quantity;
+			subTotalPrice += ToppingCount * 200;
+		} else if (this.size == 'L') {
+			subTotalPrice += this.item.getPriceL() * quantity;
+			subTotalPrice += ToppingCount * 300;
+		}
+		return subTotalPrice;
 	}
 
 	@Override
