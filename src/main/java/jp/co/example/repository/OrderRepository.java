@@ -156,5 +156,17 @@ public class OrderRepository {
 		order.setId(keyHolder.getKey().intValue());
 		return order;
 	}
+	
+	/**
+	 * 渡した合計金額を更新する.
+	 * 
+	 * @param Order 更新する注文情報
+	 */
+	public void updateTotalPrice(Integer id,Integer totalPrice) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE orders SET total_price=:totalPrice WHERE id=:id");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id",id).addValue("totalPrice", totalPrice);
+		template.update(sql.toString(), param);
+	}
 
 }
