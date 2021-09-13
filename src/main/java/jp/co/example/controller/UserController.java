@@ -71,7 +71,7 @@ public class UserController {
 		BeanUtils.copyProperties(form, user);
 		System.out.println(user);
 		userService.insert(user);
-		return "redirect:/register/toLogin";
+		return "redirect:/user/toLogin";
 	}
 
 	/**
