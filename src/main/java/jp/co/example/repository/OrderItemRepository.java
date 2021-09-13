@@ -2,6 +2,7 @@ package jp.co.example.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -30,6 +31,18 @@ public class OrderItemRepository {
 		template.update(sql, param, keyHolder, keyColumnName);
 		orderItem.setId(keyHolder.getKey().intValue());
 		return orderItem;
+	}
+	
+	/**
+	 * 注文商品と付随するトッピングを削除する.
+	 * 
+	 * @param orderItemId 削除した注文商品
+	 */
+	public void deleteOrderItemAndOrderTopping(int orderItemId) {
+		String sql = "WITH deleted AS (DELETE FROM order_items WHERE id = :id RETURNING id)"
+				+ " DELETE FROM order_toppings WHERE order_item_id IN (SELECT id FROM deleted);";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", orderItemId);
+		template.update(sql, param);
 	}
 	
 }

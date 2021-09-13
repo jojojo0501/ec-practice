@@ -96,4 +96,12 @@ public class OrderService {
 		return order;
 	}
 	
+	/**
+	 * ショッピングカート内の商品を削除する.
+	 * @param orderItemId 削除する商品のid
+	 */
+	public void deleteOrderItemAndOrderTopping(int orderItemId) {
+		orderItemRepository.deleteOrderItemAndOrderTopping(orderItemId);
+	}
+	
 }

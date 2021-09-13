@@ -52,5 +52,18 @@ public class OrderController {
 		orderService.addShoppingCart(userId, form);
 		return "redirect:/order/showCart";
 	}
+	
+	/**
+	 * ショッピングカート内の商品を削除します.
+	 * @param orderItemId 削除する商品id
+	 * @return ショッピングカート一覧画面へリダイレクトする.
+	 */
+	@RequestMapping("/deleteCart")
+	public String deleteOrderItemsAndOrderToppings(Integer orderItemId) {
+		System.out.println("orderItemId:"+orderItemId);
+		orderService.deleteOrderItemAndOrderTopping(orderItemId);
+		return "redirect:/order/showCart";
+	}
+	
 
 }

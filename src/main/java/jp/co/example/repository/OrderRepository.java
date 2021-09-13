@@ -36,7 +36,7 @@ public class OrderRepository {
 		Item item = null;
 		OrderTopping orderTopping = null;
 		Topping topping = null;
-
+		//前の行と比較するため、各idを初期変数として定義
 		int beforeOrderId = 0;
 		int beforeOrderItemId = 0;
 		int beforeOrderToppingId = 0;
@@ -44,6 +44,7 @@ public class OrderRepository {
 		int beforeToppingId = 0;
 
 		while (rs.next()) {
+			//現在件sなくされているIdを取得
 			int nowOrderId = rs.getInt("o_id");
 			int nowOrderItemId = rs.getInt("i_id");
 			int nowOrderToppingId = rs.getInt("ot_topping_id");
