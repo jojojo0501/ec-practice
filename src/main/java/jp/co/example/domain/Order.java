@@ -140,4 +140,36 @@ public class Order {
 				+ destinationAddress + ", destinationTel=" + destinationTel + ", deliveryTime=" + deliveryTime
 				+ ", paymentMethod=" + paymentMethod + ", user=" + user + ", orderItemList=" + orderItemList + "]";
 	}
+
+	/**
+	 * ショッピングカート内の商品の合計金額（税抜）を算定します.
+	 * 
+	 * @return 合計金額（税抜）
+	 */
+	public Integer getCalcSubTotalPrice() {
+		Integer subTotalPrice = 0;
+		for (OrderItem orderItem : this.orderItemList) {
+			subTotalPrice += orderItem.getSubTotal();
+		}
+		return subTotalPrice;
+	}
+
+	/**
+	 * 消費税額を計算します.
+	 * 
+	 * @return 消費税額
+	 */
+	public Integer getTax() {
+		return (int) (this.getCalcSubTotalPrice() * 0.1);
+	}
+
+	/**
+	 * ショッピングカート内の商品の合計金額（税込）を算定します.
+	 * 
+	 * @return 合計金額（税込）
+	 */
+	public Integer getCalcTotalPrice() {
+		return this.getCalcSubTotalPrice() + this.getTax();
+	}
+
 }
