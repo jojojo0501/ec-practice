@@ -31,13 +31,18 @@ public class OrderService {
 
 	@Autowired
 	private OrderToppingRepository orderToppingRepository;
-	
+
 	@Autowired
 	private ItemRepository itemRepository;
 
 	@Autowired
 	private ToppingRepository toppingRepository;
 
+	/**
+	 * ショッピングカートに商品を追加します.
+	 * @param userId ユーザーId
+	 * @param form ユーザーの入力データ
+	 */
 	public void addShoppingCart(Integer userId, AddCartForm form) {
 		int status = Status.BEFORE_ORDER.getKey();
 		int defaultTotalPrice = 0;
