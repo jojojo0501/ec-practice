@@ -38,9 +38,17 @@ public class OrderRepository {
 		Topping topping = null;
 
 		int beforeOrderId = 0;
+		int beforeOrderItemId = 0;
+		int beforeOrderToppingId = 0;
+		int beforeItemId = 0;
+		int beforeToppingId = 0;
 
 		while (rs.next()) {
 			int nowOrderId = rs.getInt("o_id");
+			int nowOrderItemId = rs.getInt("i_id");
+			int nowOrderToppingId = rs.getInt("ot_topping_id");
+			int nowItemId = rs.getInt("oi_item_id");
+			int nowToppingId = rs.getInt("t_id");
 
 			if (nowOrderId != beforeOrderId) {
 				order.setId(rs.getInt("o_id"));
@@ -60,51 +68,63 @@ public class OrderRepository {
 			}
 
 			if (rs.getInt("oi_id") != 0) {
-				orderItem = new OrderItem();
-				orderItem.setId(rs.getInt("oi_id"));
-				orderItem.setItemId(rs.getInt("oi_item_id"));
-				orderItem.setOrderId(rs.getInt("oi_order_id"));
-				orderItem.setQuantity(rs.getInt("oi_quantity"));
-				orderItem.setSizeStringFromChar(rs.getString("oi_size"));
-				orderItem.setItem(item);
-				orderToppingList = new ArrayList<>();
-				orderItem.setOrderToppingList(orderToppingList);
-				orderItemList.add(orderItem);
+				if (nowOrderItemId != beforeOrderItemId) {
+					orderItem = new OrderItem();
+					orderItem.setId(rs.getInt("oi_id"));
+					orderItem.setItemId(rs.getInt("oi_item_id"));
+					orderItem.setOrderId(rs.getInt("oi_order_id"));
+					orderItem.setQuantity(rs.getInt("oi_quantity"));
+					orderItem.setSizeStringFromChar(rs.getString("oi_size"));
+					orderItem.setItem(item);
+					orderToppingList = new ArrayList<>();
+					orderItem.setOrderToppingList(orderToppingList);
+					orderItemList.add(orderItem);
+				}
 			}
 
 			if (rs.getInt("i_id") != 0) {
-				item = new Item();
-				item.setId(rs.getInt("i_id"));
-				item.setName(rs.getString("i_name"));
-				item.setDescription(rs.getString("i_description"));
-				item.setPriceM(rs.getInt("i_price_m"));
-				item.setPriceL(rs.getInt("i_price_L"));
-				item.setImagePath(rs.getString("i_image_path"));
-				item.setDeleted(rs.getBoolean("i_deleted"));
-				toppingList = new ArrayList<>();
-				item.setToppingList(toppingList);
-				orderItem.setItem(item);
+				if (nowItemId != beforeItemId) {
+					item = new Item();
+					item.setId(rs.getInt("i_id"));
+					item.setName(rs.getString("i_name"));
+					item.setDescription(rs.getString("i_description"));
+					item.setPriceM(rs.getInt("i_price_m"));
+					item.setPriceL(rs.getInt("i_price_L"));
+					item.setImagePath(rs.getString("i_image_path"));
+					item.setDeleted(rs.getBoolean("i_deleted"));
+					toppingList = new ArrayList<>();
+					item.setToppingList(toppingList);
+					orderItem.setItem(item);
+				}
 			}
 
 			if (rs.getInt("ot_id") != 0) {
-				orderTopping = new OrderTopping();
-				orderTopping.setId(rs.getInt("ot_id"));
-				orderTopping.setToppingId(rs.getInt("ot_topping_id"));
-				orderTopping.setOrderItemId(rs.getInt("ot_order_item_id"));
-				orderTopping.setTopping(topping);
-				orderToppingList.add(orderTopping);
+				if (nowOrderToppingId != beforeOrderToppingId) {
+					orderTopping = new OrderTopping();
+					orderTopping.setId(rs.getInt("ot_id"));
+					orderTopping.setToppingId(rs.getInt("ot_topping_id"));
+					orderTopping.setOrderItemId(rs.getInt("ot_order_item_id"));
+					orderTopping.setTopping(topping);
+					orderToppingList.add(orderTopping);
+				}
 			}
 
 			if (rs.getInt("t_id") != 0) {
-				topping = new Topping();
-				topping.setId(rs.getInt("t_id"));
-				topping.setName(rs.getString("t_name"));
-				topping.setPriceM(rs.getInt("t_price_m"));
-				topping.setPriceL(rs.getInt("t_price_l"));
-				toppingList.add(topping);
-				orderTopping.setTopping(topping);
+				if (nowToppingId != beforeToppingId) {
+					topping = new Topping();
+					topping.setId(rs.getInt("t_id"));
+					topping.setName(rs.getString("t_name"));
+					topping.setPriceM(rs.getInt("t_price_m"));
+					topping.setPriceL(rs.getInt("t_price_l"));
+					toppingList.add(topping);
+					orderTopping.setTopping(topping);
+				}
 			}
 			beforeOrderId = nowOrderId;
+			beforeOrderItemId = nowOrderItemId;
+			beforeOrderToppingId = nowOrderToppingId;
+			beforeItemId = nowItemId;
+			beforeToppingId = nowToppingId;
 		}
 		return order;
 	};
@@ -156,16 +176,16 @@ public class OrderRepository {
 		order.setId(keyHolder.getKey().intValue());
 		return order;
 	}
-	
+
 	/**
 	 * 渡した合計金額を更新する.
 	 * 
 	 * @param Order 更新する注文情報
 	 */
-	public void updateTotalPrice(Integer id,Integer totalPrice) {
+	public void updateTotalPrice(Integer id, Integer totalPrice) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE orders SET total_price=:totalPrice WHERE id=:id");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("id",id).addValue("totalPrice", totalPrice);
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id).addValue("totalPrice", totalPrice);
 		template.update(sql.toString(), param);
 	}
 

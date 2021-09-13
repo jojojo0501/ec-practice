@@ -81,4 +81,19 @@ public class OrderService {
 		order.getOrderItemList().add(orderItem);
 		orderRepository.updateTotalPrice(order.getId(), order.getCalcSubTotalPrice());
 	}
+	
+	/**
+	 * ショッピングカート内の注文情報を取得します.
+	 * @param userId ユーザーId
+	 * @return　注文情報
+	 */
+	public Order showShoppingCart(Integer userId) {
+		int status = Status.BEFORE_ORDER.getKey();
+		Order order = orderRepository.findByUserIdAndStatus(userId, status);
+		for(OrderItem orderItem:order.getOrderItemList()) {
+			System.out.println(orderItem);
+		}
+		return order;
+	}
+	
 }
