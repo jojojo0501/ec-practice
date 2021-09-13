@@ -3,6 +3,8 @@ package jp.co.example.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import jp.co.example.domain.OrderItem;
 import jp.co.example.domain.OrderTopping;
 import jp.co.example.domain.Status;
 import jp.co.example.domain.Topping;
+import jp.co.example.domain.User;
 import jp.co.example.form.AddCartForm;
 import jp.co.example.repository.ItemRepository;
 import jp.co.example.repository.OrderItemRepository;
@@ -37,6 +40,9 @@ public class OrderService {
 
 	@Autowired
 	private ToppingRepository toppingRepository;
+	
+	@Autowired
+	private HttpSession session;
 
 	/**
 	 * ショッピングカートに商品を追加します.
@@ -64,7 +70,7 @@ public class OrderService {
 		orderItem.setSize(form.getCharSize());
 		orderItemRepository.insert(orderItem);
 		List<OrderTopping> orderToppingList = new ArrayList<>();
-		if (form.getToppingIdList().size() != 0) {
+		if (form.getToppingIdList() != null) {
 			for (String toppingId : form.getToppingIdList()) {
 				Integer intToppingId = Integer.parseInt(toppingId);
 				Topping topping = toppingRepository.load(intToppingId);
@@ -90,9 +96,6 @@ public class OrderService {
 	public Order showShoppingCart(Integer userId) {
 		int status = Status.BEFORE_ORDER.getKey();
 		Order order = orderRepository.findByUserIdAndStatus(userId, status);
-		for(OrderItem orderItem:order.getOrderItemList()) {
-			System.out.println(orderItem);
-		}
 		return order;
 	}
 	
@@ -100,8 +103,14 @@ public class OrderService {
 	 * ショッピングカート内の商品を削除する.
 	 * @param orderItemId 削除する商品のid
 	 */
-	public void deleteOrderItemAndOrderTopping(int orderItemId) {
+	public void deleteOrderItemAndOrderTopping(int orderItemId,int orderId) {
 		orderItemRepository.deleteOrderItemAndOrderTopping(orderItemId);
+		//ショッピングカート内の商品を削除したため、注文情報の金額へ反映する
+		int status = Status.BEFORE_ORDER.getKey();
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
+		Order order = orderRepository.findByUserIdAndStatus(userId, status);
+		orderRepository.updateTotalPrice(order.getId(), order.getCalcSubTotalPrice());
 	}
 	
 }

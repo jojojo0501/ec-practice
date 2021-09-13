@@ -59,9 +59,8 @@ public class OrderController {
 	 * @return ショッピングカート一覧画面へリダイレクトする.
 	 */
 	@RequestMapping("/deleteCart")
-	public String deleteOrderItemsAndOrderToppings(Integer orderItemId) {
-		System.out.println("orderItemId:"+orderItemId);
-		orderService.deleteOrderItemAndOrderTopping(orderItemId);
+	public String deleteOrderItemsAndOrderToppings(Integer orderItemId,Integer orderId) {
+		orderService.deleteOrderItemAndOrderTopping(orderItemId,orderId);
 		return "redirect:/order/showCart";
 	}
 	
