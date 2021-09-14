@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -24,6 +26,11 @@ public class OrderRepository {
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
+
+	/**
+	 * Orderオブジェクトを生成するローマッパー.
+	 */
+	private static final RowMapper<Order> ORDER_ROW_MAPPER = new BeanPropertyRowMapper<>(Order.class);
 
 	private static final ResultSetExtractor<Order> ORDER_RESULT_SET_EXTRACTOR = (rs) -> {
 		// Orderオブジェクトの作成
@@ -132,6 +139,22 @@ public class OrderRepository {
 	};
 
 	/**
+	 * 主キー検索を行います.
+	 * @param orderId 注文Id
+	 * @return 注文情報
+	 */
+	public Order load(Integer orderId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(
+				"SELECT id,user_id,status,total_price,order_date,destination_name,destination_email,destination_zipcode,");
+		sql.append("destination_address,destination_tel,delivery_time,payment_method");
+		sql.append(" FROM orders WHERE id=:orderId");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("orderId", orderId);
+		Order order = template.queryForObject(sql.toString(), param, ORDER_ROW_MAPPER);
+		return order;
+	}
+
+	/**
 	 * 引数で受け取ったユーザーId、ステータス情報をもとに注文情報を検索します.
 	 * 
 	 * @param userId ユーザーId
@@ -193,6 +216,7 @@ public class OrderRepository {
 
 	/**
 	 * 注文情報を更新する.
+	 * 
 	 * @param order 更新する注文情報
 	 */
 	public void update(Order order) {
