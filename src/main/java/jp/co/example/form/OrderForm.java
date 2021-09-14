@@ -1,6 +1,7 @@
 package jp.co.example.form;
 
 public class OrderForm {
+	private String orderId;
 	private String destinationName;
 	private String destinationEmail;
 	private String destinationZipcode;
@@ -74,11 +75,23 @@ public class OrderForm {
 		this.paymentMethod = paymentMethod;
 	}
 
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public Integer getIntOrderId() {
+		return Integer.parseInt(orderId);
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
 	@Override
 	public String toString() {
-		return "OrderForm [destinationName=" + destinationName + ", destinationEmail=" + destinationEmail
-				+ ", destinationZipcode=" + destinationZipcode + ", destinationAddress=" + destinationAddress
-				+ ", destinationTel=" + destinationTel + ", deliveryDate=" + deliveryDate + ", deliveryTime="
-				+ deliveryTime + ", paymentMethod=" + paymentMethod + "]";
+		return "OrderForm [orderId=" + orderId + ", destinationName=" + destinationName + ", destinationEmail="
+				+ destinationEmail + ", destinationZipcode=" + destinationZipcode + ", destinationAddress="
+				+ destinationAddress + ", destinationTel=" + destinationTel + ", deliveryDate=" + deliveryDate
+				+ ", deliveryTime=" + deliveryTime + ", paymentMethod=" + paymentMethod + "]";
 	}
 }
