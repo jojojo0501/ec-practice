@@ -64,5 +64,11 @@ public class OrderController {
 		return "redirect:/order/showCart";
 	}
 	
+	@RequestMapping("/toOrderConfirm")
+	public String toOrderConfirm() {
+		return "order_confirm";
+	}
+	
+	
 
 }
