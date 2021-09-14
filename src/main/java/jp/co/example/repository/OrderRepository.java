@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -36,7 +37,7 @@ public class OrderRepository {
 		Item item = null;
 		OrderTopping orderTopping = null;
 		Topping topping = null;
-		//前の行と比較するため、各idを初期変数として定義
+		// 前の行と比較するため、各idを初期変数として定義
 		int beforeOrderId = 0;
 		int beforeOrderItemId = 0;
 		int beforeOrderToppingId = 0;
@@ -44,7 +45,7 @@ public class OrderRepository {
 		int beforeToppingId = 0;
 
 		while (rs.next()) {
-			//現在件sなくされているIdを取得
+			// 現在件sなくされているIdを取得
 			int nowOrderId = rs.getInt("o_id");
 			int nowOrderItemId = rs.getInt("i_id");
 			int nowOrderToppingId = rs.getInt("ot_topping_id");
@@ -187,6 +188,21 @@ public class OrderRepository {
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE orders SET total_price=:totalPrice WHERE id=:id");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id).addValue("totalPrice", totalPrice);
+		template.update(sql.toString(), param);
+	}
+
+	/**
+	 * 注文情報を更新する.
+	 * @param order 更新する注文情報
+	 */
+	public void update(Order order) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(
+				"UPDATE orders SET order_date=:orderDate,destination_name=:destinationName,destination_email=:destinationEmail");
+		sql.append(
+				"destination_zipcode=destinationZipCode,destination_tel=:destinationTel,delivery_time=:deriveryTime");
+		sql.append("payment_method=:paymentMethod WHERE id = :id;");
+		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		template.update(sql.toString(), param);
 	}
 
