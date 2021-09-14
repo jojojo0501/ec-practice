@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.example.domain.Order;
 import jp.co.example.domain.User;
 import jp.co.example.form.AddCartForm;
+import jp.co.example.form.OrderForm;
 import jp.co.example.service.OrderService;
 
 @Controller
@@ -23,8 +24,13 @@ public class OrderController {
 	private OrderService orderService;
 
 	@ModelAttribute
-	public AddCartForm setUpForm() {
+	public AddCartForm setUpAddCartForm() {
 		return new AddCartForm();
+	}
+	
+	@ModelAttribute
+	public OrderForm setUpOrderForm() {
+		return new OrderForm();
 	}
 
 	/**
@@ -64,11 +70,35 @@ public class OrderController {
 		return "redirect:/order/showCart";
 	}
 	
+	/**
+	 * 注文確認画面へ遷移します.
+	 * @return 注文確認画面へフォワードする。
+	 */
 	@RequestMapping("/toOrderConfirm")
 	public String toOrderConfirm() {
 		return "order_confirm";
 	}
 	
+	/**
+	 * 注文する.
+	 * @param form 入力フォーム情報
+	 * @param orderId　注文Id
+	 * @return 注文完了画面へリダイレクト
+	 */
+	@RequestMapping("/orderResult")
+	public String order(OrderForm form,Integer orderId) {
+		orderService.updateOrder(form, orderId);
+		return "redirect:/order/toOrderFinished";
+	}
+	
+	/**
+	 * 注文確認画面へ遷移します.
+	 * @return 注文確認画面へフォワードします。
+	 */
+	@RequestMapping("/toOrderFinished")
+	public String toOrderFinished() {
+		return "order_finished";
+	}
 	
 
 }
