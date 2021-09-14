@@ -70,6 +70,9 @@ public class OrderForm {
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
+	public Integer getIntPaymentMethod() {
+		return Integer.parseInt(paymentMethod);
+	}
 
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
