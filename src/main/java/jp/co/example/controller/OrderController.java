@@ -4,6 +4,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,7 +33,14 @@ public class OrderController {
 
 	@ModelAttribute
 	public OrderForm setUpOrderForm() {
-		return new OrderForm();
+		OrderForm orderForm = new OrderForm();
+		User user = (User) session.getAttribute("user");
+		orderForm.setDestinationName(user.getName());
+		orderForm.setDestinationEmail(user.getEmail());
+		orderForm.setDestinationZipcode(user.getZipcode());
+		orderForm.setDestinationAddress(user.getAddress());
+		orderForm.setDestinationTel(user.getTelephone());
+		return orderForm;
 	}
 
 	/**
@@ -91,10 +101,14 @@ public class OrderController {
 	 * @return 注文完了画面へリダイレクト
 	 */
 	@RequestMapping("/orderResult")
-	public String order(OrderForm form) {
+	public String order(@Validated OrderForm form,BindingResult result,Model model) {
 		Boolean orderResult = orderService.updateOrder(form);
+		if(result.hasErrors()) {
+			return toOrderConfirm();
+		}
 		if (!orderResult) {
-			return "redirect:/order/toOrderConfirm";
+			model.addAttribute("deliveryTimeMessage", "今から３時間後以降の日時をご入力ください。");
+			return toOrderConfirm();
 		}
 		return "redirect:/order/toOrderFinished";
 	}

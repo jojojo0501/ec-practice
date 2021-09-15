@@ -150,9 +150,9 @@ public class OrderService {
 			Timestamp deliveryTime = new Timestamp(DatedeliveryTime.getTime());
 			order.setDeliveryTime(deliveryTime);
 			//以下でステータスの更新を行う。
-			if (PaymentMethod.CASH_ON_DELIVERY.getKey().equals(form.getIntPaymentMethod())) {
+			if (PaymentMethod.CASH_ON_DELIVERY.getKey()==form.getIntPaymentMethod()) {
 				order.setStatus(Status.NOT_PAYMENT.getKey());
-			} else if (PaymentMethod.CREDIT_CARD.getKey().equals(form.getIntPaymentMethod())) {
+			} else if (PaymentMethod.CREDIT_CARD.getKey()==form.getIntPaymentMethod()) {
 				order.setStatus(Status.DEPOSITED.getKey());
 			}
 			orderRepository.update(order);

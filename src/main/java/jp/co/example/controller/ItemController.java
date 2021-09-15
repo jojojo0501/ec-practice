@@ -85,6 +85,9 @@ public class ItemController {
 				threeItemList = new ArrayList<>();
 			}
 		}
+		if(count % 3 != 0) {
+			wrapperItemList.add(threeItemList);
+		}
 		if (count < 3) {
 			wrapperItemList.add(threeItemList);
 		}
