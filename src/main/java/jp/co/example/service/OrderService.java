@@ -162,5 +162,17 @@ public class OrderService {
 		}
 		return true;
 	}
+	
+	/**
+	 * 注文履歴情報を取得します.
+	 * @return 注文履歴情報
+	 */
+	public List<Order> showOrderHistory(){
+		int status = Status.BEFORE_ORDER.getKey();
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
+		List<Order> orderList = orderRepository.findByUserIdAndStatusNotZero(userId, status);
+		return orderList;
+	}
 
 }

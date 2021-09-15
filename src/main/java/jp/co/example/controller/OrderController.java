@@ -1,5 +1,7 @@
 package jp.co.example.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +123,17 @@ public class OrderController {
 	@RequestMapping("/toOrderFinished")
 	public String toOrderFinished() {
 		return "order_finished";
+	}
+	
+	/**
+	 * 注文履歴画面へ遷移します.
+	 * @return 注文履歴画面へフォワード
+	 */
+	@RequestMapping("/toOrderhistory")
+	public String toOrderHistory(Model model) {
+		List<Order> orderList = orderService.showOrderHistory();
+		model.addAttribute("orderList", orderList);
+		return "order_history";
 	}
 
 }
