@@ -1,12 +1,25 @@
 package jp.co.example.form;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 public class OrderForm {
 	private String orderId;
+	@NotBlank(message="名前を入力してください。")
 	private String destinationName;
+	@NotBlank(message="メールアドレスを入力してください。")
+	@Email(message="メールアドレスの形式が不正です。")
 	private String destinationEmail;
+	@NotBlank(message="郵便番号を入力してください。")
+	@Pattern(regexp="^[0-9]{7}$",message="郵便番号は７桁（ハイフン無し）で入力してください。")
 	private String destinationZipcode;
+	@NotBlank(message="住所を入力してください。")
 	private String destinationAddress;
+	@NotBlank(message="電話番号を入力してください。")
+	@Pattern(regexp="^0\\d{9,10}$",message="電話番号の形式で入力してください。")
 	private String destinationTel;
+	@NotBlank(message="配達日時を入力してください。")
 	private String deliveryDate;
 	private String deliveryTime;
 	private String paymentMethod;
