@@ -148,8 +148,12 @@ public class Order {
 	 */
 	public Integer getCalcSubTotalPrice() {
 		Integer subTotalPrice = 0;
-		for (OrderItem orderItem : this.orderItemList) {
-			subTotalPrice += orderItem.getSubTotal();
+		try {
+			for (OrderItem orderItem : this.orderItemList) {
+				subTotalPrice += orderItem.getSubTotal();
+			}
+		} catch (NullPointerException e) {
+			subTotalPrice = 0;
 		}
 		return subTotalPrice;
 	}
@@ -160,7 +164,7 @@ public class Order {
 	 * @return 消費税額
 	 */
 	public Integer getTax() {
-		return (int) (this.getCalcSubTotalPrice() * 0.1);
+		return Math.round((this.getCalcSubTotalPrice() * 0.1F));
 	}
 
 	/**
@@ -169,7 +173,8 @@ public class Order {
 	 * @return 合計金額（税込）
 	 */
 	public Integer getCalcTotalPrice() {
-		return this.getCalcSubTotalPrice() + this.getTax();
+		int tax = 10 * (int) Math.floor(this.getTax() * 0.1);
+		return this.getCalcSubTotalPrice() + tax;
 	}
 
 }
