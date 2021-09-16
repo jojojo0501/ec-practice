@@ -41,6 +41,7 @@ public class ItemController {
 				threeItemList = new ArrayList<>();
 			}
 		}
+		model.addAttribute("itemList",itemList);
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}
@@ -88,9 +89,7 @@ public class ItemController {
 		if(count % 3 != 0) {
 			wrapperItemList.add(threeItemList);
 		}
-		if (count < 3) {
-			wrapperItemList.add(threeItemList);
-		}
+		model.addAttribute("itemList",itemList);
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}

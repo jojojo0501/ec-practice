@@ -88,10 +88,11 @@ public class OrderItem {
 		Integer ToppingCount = this.orderToppingList.size();
 		if (this.size == 'M') {
 			subTotalPrice += this.item.getPriceM() * quantity;
-			subTotalPrice += ToppingCount * 200;
-		} else if (this.size == 'L') {
+			subTotalPrice += ToppingCount * quantity * 200;
+		}
+		if (this.size == 'L') {
 			subTotalPrice += this.item.getPriceL() * quantity;
-			subTotalPrice += ToppingCount * 300;
+			subTotalPrice += ToppingCount * quantity * 300;
 		}
 		return subTotalPrice;
 	}
