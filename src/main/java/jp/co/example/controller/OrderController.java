@@ -55,7 +55,7 @@ public class OrderController {
 		User user = (User) session.getAttribute("user");
 		Integer userId = user.getId();
 		Order order = orderService.showShoppingCart(userId);
-		if(order.getOrderItemList().size() == 0) {
+		if(order.getId() == null || order.getOrderItemList().size() == 0) {
 			model.addAttribute("noItemMessage", "ショッピングカートに商品がありません。");
 		}
 		session.setAttribute("order", order);

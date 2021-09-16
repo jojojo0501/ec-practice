@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +54,9 @@ public class OrderService {
 
 	@Autowired
 	private HttpSession session;
+
+	@Autowired
+	private JavaMailSender sender;
 
 	/**
 	 * ショッピングカートに商品を追加します.
@@ -128,6 +136,7 @@ public class OrderService {
 	 * @param form 入力データ
 	 * @return 希望配達日時が現在時刻から3時間未満の場合はfalseを返す。それ以外はtrueを返す。
 	 */
+	@Async
 	public Boolean updateOrder(OrderForm form) {
 		Order order = orderRepository.load(form.getIntOrderId());
 		// フォームの値をオブジェクトにコピーする。
@@ -149,25 +158,70 @@ public class OrderService {
 			// Date型の配達日時をTimestamp型へ変換する。
 			Timestamp deliveryTime = new Timestamp(DatedeliveryTime.getTime());
 			order.setDeliveryTime(deliveryTime);
-			//以下でステータスの更新を行う。
-			if (PaymentMethod.CASH_ON_DELIVERY.getKey()==form.getIntPaymentMethod()) {
+			// 以下でステータスの更新を行う。
+			if (PaymentMethod.CASH_ON_DELIVERY.getKey() == form.getIntPaymentMethod()) {
 				order.setStatus(Status.NOT_PAYMENT.getKey());
-			} else if (PaymentMethod.CREDIT_CARD.getKey()==form.getIntPaymentMethod()) {
+			} else if (PaymentMethod.CREDIT_CARD.getKey() == form.getIntPaymentMethod()) {
 				order.setStatus(Status.DEPOSITED.getKey());
 			}
 			orderRepository.update(order);
+			String content = createContent(order);
+			sendMail(order.getDestinationEmail(), content);
 		} catch (java.text.ParseException pe) {
 			pe.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-	
+
+	/**
+	 * 注文確定時にメール送信を行う.
+	 * 
+	 * @param mailAdress 宛先メールアドレス
+	 */
+	@Async
+	public void sendMail(String mailAdress, String content) {
+		MimeMessage message = sender.createMimeMessage();
+		try {
+			// 送信情報設定
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+			helper.setFrom("rakuraku-pizza@rakus.com");
+			helper.setTo(mailAdress);
+			helper.setSubject("【ラクラクピザ】ご注文ありがとうございました。");
+			helper.setText(content, true);
+			// メール送信
+			sender.send(message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * メール本文を作成する.
+	 * 
+	 * @param order 注文商品情報
+	 * @return メール本文内容
+	 */
+	private String createContent(Order order) {
+		StringBuilder content = new StringBuilder();
+		content.append("<html>" + order.getDestinationName() + "様<br>ご注文ありがとうございます。");
+		content.append("ご注文情報は下記の通りです。商品の到着まで今しばらくおまちください。<hr>");
+		content.append("ご注文日：" + order.getOrderDate() + "<br>");
+		content.append("請求金額：" + order.getTotalPrice() + "円" + "<br>");
+		content.append("メールアドレス：" + order.getDestinationEmail() + "<br>");
+		content.append("住所：" + order.getDestinationZipcode() + " " + order.getDestinationAddress() + "<br>");
+		content.append("電話番号：" + order.getDestinationTel() + "<br>");
+		content.append("お届け予定日：" + order.getDeliveryTime() + "<br>");
+		content.append("</html>");
+		return content.toString();
+	}
+
 	/**
 	 * 注文履歴情報を取得します.
+	 * 
 	 * @return 注文履歴情報
 	 */
-	public List<Order> showOrderHistory(){
+	public List<Order> showOrderHistory() {
 		int status = Status.BEFORE_ORDER.getKey();
 		User user = (User) session.getAttribute("user");
 		Integer userId = user.getId();
