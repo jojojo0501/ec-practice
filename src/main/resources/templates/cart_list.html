@@ -51,7 +51,8 @@
 			<div
 				class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
 				<h3 class="text-center">ショッピングカート</h3>
-				<table class="table table-striped item-list-table">
+				<h3 class="text-center" th:text="${noItemMessage}" style="color:red;"></h3>
+				<table class="table table-striped item-list-table" th:if="${session.order.orderItemList.size != 0}">
 					<tbody>
 						<tr>
 							<th>
@@ -121,7 +122,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" th:if="${session.order.orderItemList.size != 0}">
 			<div class="col-xs-offset-2 col-xs-8">
 				<div class="form-group text-center">
 					<span id="total-price">消費税：<span th:text="${#numbers.formatInteger(session.order.getTax(),1,'COMMA')}">8,000</span>円</span><br>
@@ -130,7 +131,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" th:if="${session.order.orderItemList.size != 0}">
 			<div class="col-xs-offset-5 col-xs-3">
 				<div class="form-group">
 					<form action="order_confirm.html" th:action="@{/order/toOrderConfirm}">

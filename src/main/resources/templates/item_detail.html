@@ -73,14 +73,16 @@
 								</div>
 								<div class="col-sm-12">
 									<label class="radio-inline">
-										<input type="radio"
+										<input type="radio" class="size"
 											name="size" value="M" checked="checked">
 										<span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${#numbers.formatInteger(item.priceM,2,'COMMA')}">1,380</span>円(税抜)
+										<input type="hidden" id="priceM" th:value="${item.priceM}">
 									</label>
 									<label class="radio-inline">
-										<input type="radio"
+										<input type="radio" class="size"
 											name="size" value="L">
 										<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${#numbers.formatInteger(item.priceL,2,'COMMA')}">2,380</span>円(税抜)
+										<input type="hidden" id="priceL" th:value="${item.priceL}">
 									</label>
 								</div>
 							</div>
@@ -98,9 +100,9 @@
 										<span>&nbsp;Ｌ</span>&nbsp;&nbsp;300円(税抜)
 									</label>
 								</div>
-								<div class="col-sm-12">
+								<div class="col-sm-12" id="topping">
 									<label class="checkbox-inline" th:each="topping:${item.toppingList}">
-										<input type="checkbox" name="toppingIdList" th:value="${topping.id}"><span th:text="${topping.name}"></span>
+										<input type="checkbox" name="toppingIdList" class="checkbox" th:value="${topping.id}"><span th:text="${topping.name}"></span>
 									</label>
 								</div>
 							</div>
@@ -115,7 +117,7 @@
 									<label for="">数量:</label>
 									<label class="control-label"
 										style="color: red" for="inputError">数量を選択してください</label> <select
-										name="quantity" class="form-control">
+										name="quantity" class="form-control" id="pizza-num">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -138,7 +140,7 @@
 				<div class="row">
 					<div class="col-xs-offset-2 col-xs-10">
 						<div class="form-group">
-							<span id="total-price">この商品金額：38,000 円(税抜)</span>
+							<span id="total-price">この商品金額：<span id="totalPrice"></span>円(税抜)</span>
 						</div>
 					</div>
 				</div>
@@ -160,6 +162,7 @@
 	</div>
 	<!-- end container -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+	<script src="../js/total_amount_calc.min.js" th:src="@{/js/total_amount_calc.js}"></script>
+	<script src="../js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
 </body>
 </html>
