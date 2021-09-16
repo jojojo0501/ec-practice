@@ -51,10 +51,13 @@ public class OrderController {
 	 * @return
 	 */
 	@RequestMapping("/showCart")
-	public String showShoppingCart() {
+	public String showShoppingCart(Model model) {
 		User user = (User) session.getAttribute("user");
 		Integer userId = user.getId();
 		Order order = orderService.showShoppingCart(userId);
+		if(order.getOrderItemList().size() == 0) {
+			model.addAttribute("noItemMessage", "ショッピングカートに商品がありません。");
+		}
 		session.setAttribute("order", order);
 		return "cart_list";
 	}
@@ -105,10 +108,7 @@ public class OrderController {
 	@RequestMapping("/orderResult")
 	public String order(@Validated OrderForm form,BindingResult result,Model model) {
 		Boolean orderResult = orderService.updateOrder(form);
-		if(result.hasErrors()) {
-			return toOrderConfirm();
-		}
-		if (!orderResult) {
+		if(result.hasErrors() || !orderResult) {
 			model.addAttribute("deliveryTimeMessage", "今から３時間後以降の日時をご入力ください。");
 			return toOrderConfirm();
 		}
@@ -132,6 +132,9 @@ public class OrderController {
 	@RequestMapping("/toOrderhistory")
 	public String toOrderHistory(Model model) {
 		List<Order> orderList = orderService.showOrderHistory();
+		if(orderList.size() == 0) {
+			model.addAttribute("noOrderMessage", "過去に注文した商品がありません。");
+		}
 		model.addAttribute("orderList", orderList);
 		return "order_history";
 	}
