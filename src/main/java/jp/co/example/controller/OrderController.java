@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,13 +13,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.domain.CreditCardPaymenResponse;
 import jp.co.example.domain.Order;
 import jp.co.example.domain.User;
 import jp.co.example.form.AddCartForm;
 import jp.co.example.form.OrderForm;
+import jp.co.example.service.CreditCardPaymentService;
 import jp.co.example.service.OrderService;
 
 @Controller
+@EnableAsync
 @RequestMapping("/order")
 public class OrderController {
 
@@ -27,6 +31,9 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private CreditCardPaymentService creditCardPaymentSerice;
 
 	@ModelAttribute
 	public AddCartForm setUpAddCartForm() {
@@ -107,13 +114,35 @@ public class OrderController {
 	 */
 	@RequestMapping("/orderResult")
 	public String order(@Validated OrderForm form,BindingResult result,Model model) {
-		Boolean orderResult = orderService.updateOrder(form);
+		Boolean orderResult = false;
+		if("2".equals(form.getPaymentMethod())) {
+			//クレジットカード支払い処理
+			CreditCardPaymenResponse creditCardPaymenResponse = creditCardPaymentSerice.paymentApiService(form);
+			//jsonデータ確認
+			System.out.println(creditCardPaymenResponse);
+			if("success".equals(creditCardPaymenResponse.getStatus())) {
+				orderResult = orderService.updateOrder(form);
+				if(result.hasErrors() || !orderResult) {
+					model.addAttribute("deliveryTimeMessage", "今から３時間後以降の日時をご入力ください。");
+					return toOrderConfirm();
+				}
+				return "redirect:/order/toOrderFinished";			
+			}else {
+				model.addAttribute("creditCardErrorMessage","クレジットカード情報が不正です");
+				return toOrderConfirm();		
+			}
+		}
+		orderResult = orderService.updateOrder(form);
 		if(result.hasErrors() || !orderResult) {
 			model.addAttribute("deliveryTimeMessage", "今から３時間後以降の日時をご入力ください。");
 			return toOrderConfirm();
 		}
-		return "redirect:/order/toOrderFinished";
+		if("1".equals(form.getPaymentMethod())) {
+			return "redirect:/order/toOrderFinished";			
+		}
+		return toOrderConfirm();
 	}
+	
 
 	/**
 	 * 注文確認画面へ遷移します.
