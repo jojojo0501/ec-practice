@@ -136,7 +136,7 @@ public class OrderService {
 	 * @param form 入力データ
 	 * @return 希望配達日時が現在時刻から3時間未満の場合はfalseを返す。それ以外はtrueを返す。
 	 */
-	@Async
+	
 	public Boolean updateOrder(OrderForm form) {
 		Order order = orderRepository.load(form.getIntOrderId());
 		// フォームの値をオブジェクトにコピーする。
@@ -165,8 +165,8 @@ public class OrderService {
 				order.setStatus(Status.DEPOSITED.getKey());
 			}
 			orderRepository.update(order);
-			String content = createContent(order);
-			sendMail(order.getDestinationEmail(), content);
+//			String content = createContent(order);
+//			sendMail(order.getDestinationEmail(), content);
 		} catch (java.text.ParseException pe) {
 			pe.printStackTrace();
 			return false;
