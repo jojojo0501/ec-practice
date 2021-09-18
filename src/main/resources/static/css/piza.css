@@ -35,3 +35,14 @@ th {
 .credit-form {
 	display: none;
 }
+
+.search-button{
+	position:relative;
+	left:7%;
+}
+
+.search-select{
+	position:relative;
+	left:22%;
+	bottom:10px;
+}

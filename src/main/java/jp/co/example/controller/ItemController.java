@@ -41,7 +41,7 @@ public class ItemController {
 				threeItemList = new ArrayList<>();
 			}
 		}
-		model.addAttribute("itemList",itemList);
+		model.addAttribute("itemList", itemList);
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}
@@ -63,16 +63,31 @@ public class ItemController {
 
 	/**
 	 * 引数で受け取った商品名をもとに曖昧検索を行います.
-	 * 
+	 *  searchOrderNumが0ならid順、1なら金額昇順、２なら金額降順
 	 * @param name  商品名
 	 * @param model リクエストスコープに商品情報を格納します。
 	 * @return 商品一覧ページへフォワードします。
 	 */
 	@RequestMapping("/search")
-	public String searchByItemName(String name, Model model) {
-		List<Item> itemList = itemService.searchByLikeName(name);
-		if (itemList == null || "".equals(name)) {
-			model.addAttribute("noItemMessage", "該当する商品がありません。");
+	public String searchByItemName(String name, String searchOrderNum, Model model) {
+		List<Item> itemList = null;
+		if (!("0".equals(searchOrderNum)) && !("".equals(name))) {
+			itemList = itemService.searchByLikeNameOrderByPrice(name, searchOrderNum);
+		} else if (!("0".equals(searchOrderNum)) && ("".equals(name))) {
+			itemList = itemService.searchAllItemOrderByPrice(searchOrderNum);
+		} else if ("0".equals(searchOrderNum) && ("".equals(name))) {
+			model.addAttribute("ItemMessage", "該当する商品がありません。");
+			itemList = itemService.searchAllItem();
+		} else {
+			itemList = itemService.searchByLikeName(name);
+		}
+		if("1".equals(searchOrderNum)) {
+			model.addAttribute("ItemMessage", "金額昇順で検索しました！");
+		}else if("2".equals(searchOrderNum)) {
+			model.addAttribute("ItemMessage", "金額降順で検索しました！");						
+		}
+		if (itemList == null) {
+			model.addAttribute("ItemMessage", "該当する商品がありません。");
 			itemList = itemService.searchAllItem();
 		}
 		int count = 0;
@@ -86,10 +101,10 @@ public class ItemController {
 				threeItemList = new ArrayList<>();
 			}
 		}
-		if(count % 3 != 0) {
+		if (count % 3 != 0) {
 			wrapperItemList.add(threeItemList);
 		}
-		model.addAttribute("itemList",itemList);
+		model.addAttribute("itemList", itemList);
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}
