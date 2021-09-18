@@ -67,5 +67,25 @@ public class ItemRepository {
 		}
 		return itemList;
 	}
+	
+	/**
+	 * 商品リストを値段の昇順で取得します.
+	 * @return 商品リスト
+	 */
+	public List<Item> findAllOrderByPriceASC() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
+		sql.append(" FROM items ORDER BY price_m ASC;");
+		List<Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
+		return itemList;
+	}
+	
+	public List<Item> findAllOrderByPriceDESC() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
+		sql.append(" FROM items ORDER BY price_m DESC;");
+		List<Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
+		return itemList;
+	}
 
 }
