@@ -118,7 +118,6 @@ public class OrderController {
 		if("2".equals(form.getPaymentMethod())) {
 			//クレジットカード支払い処理
 			CreditCardPaymenResponse creditCardPaymenResponse = creditCardPaymentSerice.paymentApiService(form);
-			//jsonデータ確認
 			System.out.println(creditCardPaymenResponse);
 			if("success".equals(creditCardPaymenResponse.getStatus())) {
 				orderResult = orderService.updateOrder(form);
