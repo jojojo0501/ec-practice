@@ -45,25 +45,37 @@ public class ItemService {
 		List<Item> itemList = itemRepository.findByLikeName(name);
 		return itemList;
 	}
-	
+
 	/**
-	 * 金額の昇順で商品一覧を取得します.
-	 * @return　商品リスト
-	 */
-	public List<Item> searchAllItemOrderByPriceASC(){
-		List<Item> itemList = itemRepository.findAllOrderByPriceASC();
-		return itemList;
-	}
-	
-	/**
-	 * 金額の降順で商品一覧を取得します.
+	 * 金額の昇順または降順で商品一覧を取得します.
+	 * 
 	 * @return 商品リスト
 	 */
-	public List<Item> searchAllItemOrderByPriceDESC(){
-		List<Item> itemList = itemRepository.findAllOrderByPriceDESC();
+	public List<Item> searchAllItemOrderByPrice(String searchOrderNum) {
+		List<Item> itemList = null;
+		if ("1".equals(searchOrderNum)) {
+			itemList = itemRepository.findAllOrderByPriceASC();
+		} else if ("2".equals(searchOrderNum)) {
+			itemList = itemRepository.findAllOrderByPriceDESC();
+		}
 		return itemList;
 	}
-	
-	
+
+	/**
+	 * 金額の昇順または降順で商品一覧を取得します.
+	 * 
+	 * @param name           検索商品名
+	 * @param searchOrderNum １の場合金額昇順、２の場合金額降順
+	 * @return 商品一覧
+	 */
+	public List<Item> searchByLikeNameOrderByPrice(String name, String searchOrderNum) {
+		List<Item> itemList = null;
+		if ("1".equals(searchOrderNum)) {
+			itemList = itemRepository.findByLikeNameOrderByPriceASC(name);
+		} else if ("2".equals(searchOrderNum)) {
+			itemList = itemRepository.findByLikeNameOrderByPriceDESC(name);
+		}
+		return itemList;
+	}
 
 }

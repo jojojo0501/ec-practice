@@ -80,6 +80,10 @@ public class ItemRepository {
 		return itemList;
 	}
 	
+	/**
+	 * 商品リストを値段の降順で取得します.
+	 * @return 商品リスト
+	 */
 	public List<Item> findAllOrderByPriceDESC() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
@@ -87,5 +91,41 @@ public class ItemRepository {
 		List<Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
 		return itemList;
 	}
+	
+	/**
+	 * 商品リストを値段の昇順で取得します.
+	 * @param name 検索名
+	 * @return 商品リスト
+	 */
+	public List<Item> findByLikeNameOrderByPriceASC(String name) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
+		sql.append(" FROM items WHERE name ILIKE :name ORDER BY price_m ASC;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_ROW_MAPPER);
+		if (itemList.size() == 0) {
+			return null;
+		}
+		return itemList;
+	}
+	
+	/**
+	 * 商品リストを値段の降順で取得します.
+	 * @param name 検索名
+	 * @return　商品名
+	 */
+	public List<Item> findByLikeNameOrderByPriceDESC(String name) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
+		sql.append(" FROM items WHERE name ILIKE :name ORDER BY price_m DESC;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_ROW_MAPPER);
+		if (itemList.size() == 0) {
+			return null;
+		}
+		return itemList;
+	}
+	
+	
 
 }
