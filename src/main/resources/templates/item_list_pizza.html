@@ -86,7 +86,7 @@
 			<div
 				class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
 				<table class="table table-striped item-list-table">
-					<tbody>
+					<tbody class="paging-containter">
 						<tr th:each="threeItemList:${wrapperItemList}">
 							<th th:each="item:${threeItemList}">
 								<a href="item_detail.html" th:href="@{/detail?id=}+${item.id}">
@@ -100,12 +100,13 @@
 						</tr>
 					</tbody>
 				</table>
-
 			</div>
 		</div>
 	</div>
 	<!-- end container -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+	<script src="./../js/bootstrap.min.js" th:src="@{/js/paginathing.min.js}"></script>
+	<script src="./../js/paging.js" th:src="@{/js/paging.js}"></script>
 </body>
 </html>
