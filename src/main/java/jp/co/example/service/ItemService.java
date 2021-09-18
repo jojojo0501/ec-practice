@@ -45,5 +45,25 @@ public class ItemService {
 		List<Item> itemList = itemRepository.findByLikeName(name);
 		return itemList;
 	}
+	
+	/**
+	 * 金額の昇順で商品一覧を取得します.
+	 * @return　商品リスト
+	 */
+	public List<Item> searchAllItemOrderByPriceASC(){
+		List<Item> itemList = itemRepository.findAllOrderByPriceASC();
+		return itemList;
+	}
+	
+	/**
+	 * 金額の降順で商品一覧を取得します.
+	 * @return 商品リスト
+	 */
+	public List<Item> searchAllItemOrderByPriceDESC(){
+		List<Item> itemList = itemRepository.findAllOrderByPriceDESC();
+		return itemList;
+	}
+	
+	
 
 }
