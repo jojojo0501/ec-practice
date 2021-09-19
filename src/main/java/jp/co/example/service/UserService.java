@@ -75,6 +75,8 @@ public class UserService {
 	 * @return 更新後のユーザー情報
 	 */
 	public User updateUser(User user) {
+		// パスワードをハッシュ化
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.update(user);
 	}
 }
