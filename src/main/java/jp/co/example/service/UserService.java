@@ -1,6 +1,7 @@
 package jp.co.example.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,13 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	/**
 	 * 主キーをもとにユーザー情報を取得します.
+	 * 
 	 * @param userId ユーザーId
 	 * @return ユーザー情報
 	 */
@@ -29,6 +34,8 @@ public class UserService {
 	 * @param user ユーザー情報
 	 */
 	public void insert(User user) {
+		// パスワードをハッシュ化
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.insert(user);
 	}
 
@@ -41,14 +48,24 @@ public class UserService {
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-	
+
 	/**
 	 * メールアドレスとパスワードよりユーザーを検索します.
-	 * @param email　メールアドレス
+	 * 
+	 * @param email    メールアドレス
 	 * @param password パスワード
 	 * @return ユーザー情報
 	 */
-	public User searchByEmailAndPassword(String email,String password) {
-		return userRepository.findByEmailAndPassword(email, password);
+	public User login(String email, String password) {
+		User user = userRepository.findByEmail(email);
+		//ユーザーが見つからない場合nullを返す
+		if(user == null) {
+			return null;
+		}
+		//パスワードが不一致の場合はnullを返す
+		if(!passwordEncoder.matches(password, user.getPassword())) {
+			return null;
+		}
+		return user;
 	}
 }
