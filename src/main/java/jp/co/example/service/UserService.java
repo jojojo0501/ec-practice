@@ -68,4 +68,15 @@ public class UserService {
 		}
 		return user;
 	}
+	
+	/**
+	 * ユーザー情報を更新します.
+	 * @param user 更新するユーザー情報
+	 * @return 更新後のユーザー情報
+	 */
+	public User updateUser(User user) {
+		// パスワードをハッシュ化
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		return userRepository.update(user);
+	}
 }

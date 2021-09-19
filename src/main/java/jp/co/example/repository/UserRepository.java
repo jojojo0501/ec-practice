@@ -97,4 +97,18 @@ public class UserRepository {
 		}
 		return userList.get(0);
 	};
+
+	/**
+	 * ユーザー情報を更新します.
+	 * @param user 更新するユーザー
+	 * @return　更新されたユーザー情報
+	 */
+	public User update(User user) {
+		StringBuilder updateSql = new StringBuilder();
+		updateSql.append(
+				"UPDATE users SET name=:name, email=:email, password=:password, zipcode=:zipcode, address=:address, telephone=:telephone WHERE id=:id ;");
+		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+		template.update(updateSql.toString(), param);
+		return user;
+	}
 }

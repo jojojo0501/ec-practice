@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.example.domain.User;
 import jp.co.example.form.LoginForm;
 import jp.co.example.form.RegisterUserForm;
+import jp.co.example.form.UpdateUserForm;
 import jp.co.example.service.UserService;
 
 @Controller
@@ -34,6 +35,20 @@ public class UserController {
 	@ModelAttribute
 	public LoginForm setUpLoginForm() {
 		return new LoginForm();
+	}
+
+	@ModelAttribute
+	public UpdateUserForm setUpUpdateUserForm() {
+		UpdateUserForm updateUserForm = new UpdateUserForm();
+		User user = (User) session.getAttribute("user");
+		if (user != null) {
+			updateUserForm.setName(user.getName());
+			updateUserForm.setEmail(user.getEmail());
+			updateUserForm.setAddress(user.getAddress());
+			updateUserForm.setTelephone(user.getTelephone());
+			updateUserForm.setZipcode(user.getZipcode());
+		}
+		return updateUserForm;
 	}
 
 	/**
@@ -111,5 +126,47 @@ public class UserController {
 	public String logout() {
 		session.invalidate();
 		return "redirect:/";
+	}
+
+	/**
+	 * ユーザー情報更新画面へ遷移します.
+	 * 
+	 * @return ユーザー情報更新画面へフォワードします。
+	 */
+	@RequestMapping("/toUpdate")
+	public String toUpdate() {
+		return "update_user";
+	}
+
+	/**
+	 * ユーザー情報を更新します.
+	 * 
+	 * @param form  入力データ
+	 * @param model リクエストスコープに更新完了メッセージを格納します。
+	 * @return ユーザー更新画面へリダイレクト
+	 */
+	@RequestMapping("/update")
+	public String update(@Validated UpdateUserForm form, BindingResult result, Model model) {
+		// パスワード確認
+		if (!(form.getPassword().equals(form.getConfirmPassword()))) {
+			result.rejectValue("confirmPassword", "", "パスワードが一致していません。");
+		}
+		// メールアドレス重複チェック
+		User loginUser = (User) session.getAttribute("user");
+		if (!(loginUser.getEmail().equals(form.getEmail()))) {
+			User duplicateUser = userService.findByEmail(form.getEmail());
+			if ((duplicateUser != null)) {
+				result.rejectValue("email", "", "そのメールアドレスは既に登録されています。");
+			}
+		}
+		if (result.hasErrors()) {
+			return toUpdate();
+		}
+		User user = (User) session.getAttribute("user");
+		BeanUtils.copyProperties(form, user);
+		System.out.println(user);
+		userService.updateUser(user);
+		model.addAttribute("updateMessage", "ユーザー情報を更新しました！");
+		return "redirect:/user/toUpdate";
 	}
 }

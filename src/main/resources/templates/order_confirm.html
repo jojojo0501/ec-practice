@@ -30,6 +30,12 @@
 						<!-- 企業ロゴ --> <img alt="main log"
 						th:src="@{/img_pizza/header_logo.png}" height="35">
 					</a>
+					<a th:if="${session.user != null}" class="navbar-brand" href="item_list_pizza.html" th:href="@{/user/toUpdate}" style="font-size:15px;">
+					<span th:text="${session.user.name}+さんこんにちは！"></span>
+					</a>
+					<a th:unless="${session.user != null}" th:href="@{/user/toLogin}" class="navbar-brand" style="font-size:15px;">
+					<span th:text="ゲストさんこんにちは！"></span>
+					</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
