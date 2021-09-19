@@ -30,7 +30,7 @@ public class UserController {
 	public RegisterUserForm setUpRegisterForm() {
 		return new RegisterUserForm();
 	}
-	
+
 	@ModelAttribute
 	public LoginForm setUpLoginForm() {
 		return new LoginForm();
@@ -69,7 +69,6 @@ public class UserController {
 		User user = new User();
 		// フォームの値をコピー
 		BeanUtils.copyProperties(form, user);
-		System.out.println(user);
 		userService.insert(user);
 		return "redirect:/user/toLogin";
 	}
@@ -86,13 +85,14 @@ public class UserController {
 
 	/**
 	 * ログイン処理を行います.
-	 * @param form 入力された情報
+	 * 
+	 * @param form  入力された情報
 	 * @param model リクエストスコープにエラーメッセージを格納します.
 	 * @return 商品一覧画面を表示
 	 */
 	@RequestMapping("/login")
 	public String login(LoginForm form, Model model) {
-		User user = userService.searchByEmailAndPassword(form.getEmail(), form.getPassword());
+		User user = userService.login(form.getEmail(), form.getPassword());
 		if (user == null) {
 			model.addAttribute("loginErrorMessage", "メールアドレスまたはパスワードが間違っています。");
 			return "login";
@@ -101,9 +101,10 @@ public class UserController {
 			return "redirect:/";
 		}
 	}
-	
+
 	/**
 	 * ログアウト処理を行います.
+	 * 
 	 * @return 商品一覧画面へフォワードします
 	 */
 	@RequestMapping("/logout")
