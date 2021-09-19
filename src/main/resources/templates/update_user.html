@@ -52,10 +52,10 @@
 		<div class="row">
 			<div class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
 				<div class="well">
+					<h4 th:if="${updateMessage != null}" th:text="${updateMessage}" style="color:red;"></h4>
 					<form method="post" action="item_list_pizza.html" th:action="@{/user/update}" th:object="${updateUserForm}">
 						<fieldset>
 							<legend>ユーザー情報更新フォーム</legend>
-							<h4 th:if="${updateMessage != null}" th:text="${updateMessage}"></h4>
 							<div class="form-group">
 								<label for="inputName">名前:</label><label
 									class="control-label" style="color: red" for="inputError" th:errors="*{name}">名前を入力してください</label>

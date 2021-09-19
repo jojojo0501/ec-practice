@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.example.domain.User;
 import jp.co.example.form.LoginForm;
@@ -146,7 +147,7 @@ public class UserController {
 	 * @return ユーザー更新画面へリダイレクト
 	 */
 	@RequestMapping("/update")
-	public String update(@Validated UpdateUserForm form, BindingResult result, Model model) {
+	public String update(@Validated UpdateUserForm form, BindingResult result,RedirectAttributes redirectAttribute) {
 		// パスワード確認
 		if (!(form.getPassword().equals(form.getConfirmPassword()))) {
 			result.rejectValue("confirmPassword", "", "パスワードが一致していません。");
@@ -164,9 +165,8 @@ public class UserController {
 		}
 		User user = (User) session.getAttribute("user");
 		BeanUtils.copyProperties(form, user);
-		System.out.println(user);
 		userService.updateUser(user);
-		model.addAttribute("updateMessage", "ユーザー情報を更新しました！");
+		redirectAttribute.addFlashAttribute("updateMessage", "ユーザー情報を更新しました！");
 		return "redirect:/user/toUpdate";
 	}
 }
