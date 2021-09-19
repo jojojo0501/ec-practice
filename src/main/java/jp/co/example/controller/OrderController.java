@@ -214,6 +214,10 @@ public class OrderController {
 	 */
 	@RequestMapping("/toOrderhistory")
 	public String toOrderHistory(Model model) {
+		User user = (User) session.getAttribute("user");
+		if(user == null) {
+			return "redirect:/user/toLogin";
+		}
 		List<Order> orderList = orderService.showOrderHistory();
 		if (orderList.size() == 0) {
 			model.addAttribute("noOrderMessage", "過去に注文した商品がありません。");
