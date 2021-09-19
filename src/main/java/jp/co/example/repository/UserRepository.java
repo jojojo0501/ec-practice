@@ -31,6 +31,23 @@ public class UserRepository {
 	private static final RowMapper<User> USER_ROW_MAPPER = new BeanPropertyRowMapper<>(User.class);
 
 	/**
+	 * ユーザー情報を主キー検索します.
+	 * 
+	 * @param id ユーザーId
+	 * @return
+	 */
+	public User load(Integer id) {
+		String sql = "SELECT id,name, email, password, zipcode, address, telephone FROM users where id=:id;";
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
+		if (userList.size() == 0) {
+			return null;
+		}
+		return userList.get(0);
+	}
+
+	/**
 	 * ユーザー登録をする.
 	 * 
 	 * @param user ユーザー情報
@@ -47,6 +64,7 @@ public class UserRepository {
 
 	/**
 	 * メールアドレスをもとにユーザーを検索します.
+	 * 
 	 * @param email メールアドレス
 	 * @return ユーザー情報
 	 */
@@ -60,16 +78,18 @@ public class UserRepository {
 		}
 		return userList.get(0);
 	};
-	
+
 	/**
 	 * メールアドレスとパスワードよりユーザーを検索します.
-	 * @param email メールアドレス
-	 * @param password　パスワード
+	 * 
+	 * @param email    メールアドレス
+	 * @param password パスワード
 	 * @return ユーザー情報
 	 */
-	public User findByEmailAndPassword(String email,String password) {
+	public User findByEmailAndPassword(String email, String password) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id,name,email,password,zipcode,address,telephone from users WHERE email=:email AND password=:password;");
+		sql.append(
+				"SELECT id,name,email,password,zipcode,address,telephone from users WHERE email=:email AND password=:password;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("email", email).addValue("password", password);
 		List<User> userList = template.query(sql.toString(), param, USER_ROW_MAPPER);
 		if (userList.size() == 0) {

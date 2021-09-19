@@ -13,6 +13,15 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	/**
+	 * 主キーをもとにユーザー情報を取得します.
+	 * @param userId ユーザーId
+	 * @return ユーザー情報
+	 */
+	public User load(Integer userId) {
+		return userRepository.load(userId);
+	}
 
 	/**
 	 * ユーザー情報を登録します.

@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jp.co.example.controller.OrderController;
 import jp.co.example.domain.Item;
 import jp.co.example.domain.Order;
 import jp.co.example.domain.OrderItem;
@@ -125,7 +126,12 @@ public class OrderService {
 		// ショッピングカート内の商品を削除したため、注文情報の金額へ反映する
 		int status = Status.BEFORE_ORDER.getKey();
 		User user = (User) session.getAttribute("user");
-		Integer userId = user.getId();
+		Integer userId = 0;
+		if(user == null) {
+			userId = (Integer)session.getAttribute("noLoginUSerId");
+		}else {
+			userId = user.getId();
+		}
 		Order order = orderRepository.findByUserIdAndStatus(userId, status);
 		orderRepository.updateTotalPrice(order.getId(), order.getCalcSubTotalPrice());
 	}

@@ -1,5 +1,10 @@
 package jp.co.example.domain;
 
+/**
+ * クレジットカード決済WebAPIのレスポンス情報を扱うドメイン.
+ * @author kanekojota
+ *
+ */
 public class CreditCardPaymenResponse {
 	/** ステータス情報 */
 	private String status;

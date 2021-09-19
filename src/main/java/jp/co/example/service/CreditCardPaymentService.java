@@ -24,6 +24,11 @@ public class CreditCardPaymentService {
 	// 外部サーバのWEB-APIのURL
 		private static final String URL = "http://153.127.48.168:8080/sample-credit-card-web-api/credit-card/payment"; 
 
+		/**
+		 * カード決済のWebAPIを呼び出し、結果を含んだオブジェクトを返す.
+		 * @param form クレジットカード情報
+		 * @return WebAPIのレスポンス情報が入ったドメイン
+		 */
 		public CreditCardPaymenResponse paymentApiService(OrderForm form) {
 			CreditCardPaymentRequest creditCardPaymentRequest = new CreditCardPaymentRequest();
 			BeanUtils.copyProperties(form, creditCardPaymentRequest);

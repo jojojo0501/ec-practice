@@ -1,5 +1,10 @@
 package jp.co.example.domain;
 
+/**
+ * クレジットカード決済WebAPIのリクエスト情報を扱うドメイン.
+ * @author kanekojota
+ *
+ */
 public class CreditCardPaymentRequest {
 	/** ユーザID */
 	private long user_id;
