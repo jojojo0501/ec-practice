@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.domain.Item;
+import jp.co.example.form.RegisterItemForm;
 import jp.co.example.service.ItemService;
 import jp.co.example.service.ToppingService;
 
@@ -21,6 +23,11 @@ public class ItemController {
 
 	@Autowired
 	private ToppingService toppingService;
+	
+	@ModelAttribute
+	public RegisterItemForm setUpRegisterItemForm() {
+		return new RegisterItemForm();
+	}
 
 	/**
 	 * 商品一覧画面を表示します.
