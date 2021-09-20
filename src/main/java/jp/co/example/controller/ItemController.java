@@ -108,5 +108,15 @@ public class ItemController {
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}
+	
+	/**
+	 * 商品追加フォームページヘ遷移します.
+	 * @return 商品追加ページへフォワードします。
+	 */
+	@RequestMapping("/item/add-form")
+	public String toAddItemForm() {
+		return "item_add_form";
+	}
+	
 
 }
