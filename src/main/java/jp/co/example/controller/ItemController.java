@@ -28,7 +28,7 @@ public class ItemController {
 
 	@Autowired
 	private ToppingService toppingService;
-	
+
 	@ModelAttribute
 	public RegisterItemForm setUpRegisterItemForm() {
 		return new RegisterItemForm();
@@ -53,6 +53,9 @@ public class ItemController {
 				threeItemList = new ArrayList<>();
 			}
 		}
+		if (count % 3 != 0) {
+			wrapperItemList.add(threeItemList);
+		}
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
@@ -74,8 +77,8 @@ public class ItemController {
 	}
 
 	/**
-	 * 引数で受け取った商品名をもとに曖昧検索を行います.
-	 *  searchOrderNumが0ならid順、1なら金額昇順、２なら金額降順
+	 * 引数で受け取った商品名をもとに曖昧検索を行います. searchOrderNumが0ならid順、1なら金額昇順、２なら金額降順
+	 * 
 	 * @param name  商品名
 	 * @param model リクエストスコープに商品情報を格納します。
 	 * @return 商品一覧ページへフォワードします。
@@ -93,10 +96,10 @@ public class ItemController {
 		} else {
 			itemList = itemService.searchByLikeName(name);
 		}
-		if("1".equals(searchOrderNum)) {
+		if ("1".equals(searchOrderNum)) {
 			model.addAttribute("ItemMessage", "金額昇順で検索しました！");
-		}else if("2".equals(searchOrderNum)) {
-			model.addAttribute("ItemMessage", "金額降順で検索しました！");						
+		} else if ("2".equals(searchOrderNum)) {
+			model.addAttribute("ItemMessage", "金額降順で検索しました！");
 		}
 		if (itemList == null) {
 			model.addAttribute("ItemMessage", "該当する商品がありません。");
@@ -120,23 +123,25 @@ public class ItemController {
 		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "item_list_pizza";
 	}
-	
+
 	/**
 	 * 商品追加フォームページヘ遷移します.
+	 * 
 	 * @return 商品追加ページへフォワードします。
 	 */
 	@RequestMapping("/item/add-form")
 	public String toAddItemForm() {
 		return "item_add_form";
 	}
-	
+
 	/**
 	 * 商品を追加します.
+	 * 
 	 * @param form 入力された商品情報
-	 * @return　商品一覧ページへリダイレクトする。
+	 * @return 商品一覧ページへリダイレクトする。
 	 */
 	@RequestMapping("/item/register")
-	public String registerItem(@Validated RegisterItemForm form,BindingResult result) throws IOException {
+	public String registerItem(@Validated RegisterItemForm form, BindingResult result) throws IOException {
 		// 画像ファイル形式チェック
 		MultipartFile imageFile = form.getImageFile();
 		String fileExtension = null;
@@ -149,10 +154,10 @@ public class ItemController {
 		} catch (Exception e) {
 			result.rejectValue("imageFile", "", "拡張子は.jpgか.pngのみに対応しています");
 		}
-		itemService.registerItem(form,fileExtension);
+		itemService.registerItem(form, fileExtension);
 		return "redirect:/";
 	}
-	
+
 	/*
 	 * ファイル名から拡張子を返します.
 	 * 
@@ -170,6 +175,5 @@ public class ItemController {
 		}
 		return originalFileName.substring(point + 1);
 	}
-	
 
 }

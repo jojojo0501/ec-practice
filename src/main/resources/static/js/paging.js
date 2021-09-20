@@ -3,8 +3,8 @@ $(function() {
 		perPage: 3,//1ページあたりの表示件数
 		prevText:'前へ',//1つ前のページへ移動するボタンのテキスト
 		nextText:'次へ',//1つ次のページへ移動するボタンのテキスト
-		firstText:'最初へ',
-		lastText:'最後へ',
+		firstText:'最初',
+		lastText:'最後',
 		activeClass: 'navi-active',//現在のページ番号に任意のclassを付与できます
 	})
 });
