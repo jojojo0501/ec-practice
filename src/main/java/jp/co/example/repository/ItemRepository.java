@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.domain.Item;
@@ -124,6 +127,23 @@ public class ItemRepository {
 			return null;
 		}
 		return itemList;
+	}
+	
+	/**
+	 * 新商品を登録します.
+	 * @param item 商品情報
+	 * @return　新商品情報
+	 */
+	public Item insert(Item item) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+		StringBuilder insertSql = new StringBuilder();
+		insertSql.append("INSERT INTO items(name,description,price_m,price_l,image_path)");
+		insertSql.append("VALUES(:name,:description,:priceM,:priceL,:imagePath);");
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		String[] keyColumnNames = { "id" };
+		template.update(insertSql.toString(), param, keyHolder, keyColumnNames);
+		item.setId(keyHolder.getKey().intValue());
+		return item;
 	}
 	
 	
