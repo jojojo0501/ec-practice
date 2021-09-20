@@ -59,7 +59,9 @@
 				<h3 class="text-center">商品詳細</h3>
 				<div class="row">
 					<div class="col-xs-5">
-						<img src="../static/img_pizza/1.jpg" th:src="@{/img_pizza/}+${item.imagePath}" class="img-responsive img-rounded item-img-center">
+						<span th:if="${item.id <= 18}"><img th:src="@{/img_pizza/}+${item.imagePath}" class="img-responsive img-rounded item-img-center"></span>
+						<span th:unless="${item.id <= 18}"><img th:src="${item.imagePath}" class="img-responsive img-rounded item-img-center"></span>
+						
 					</div>
 
 					<div class="col-xs-5">
