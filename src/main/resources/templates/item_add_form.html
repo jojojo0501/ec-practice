@@ -52,61 +52,46 @@
 		<div class="row">
 			<div class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
 				<div class="well">
-					<h4 th:if="${updateMessage != null}" th:text="${updateMessage}" style="color:red;"></h4>
-					<form method="post" action="item_list_pizza.html" th:action="@{/user/update}" th:object="${updateUserForm}">
+					<form method="post" action="item_list_pizza.html" th:action="@{/item/register}" th:object="${registerItemForm}" enctype="multipart/form-data">
 						<fieldset>
-							<legend>ユーザー情報更新フォーム</legend>
+							<legend>新商品登録</legend>
 							<div class="form-group">
-								<label for="inputName">名前:</label><label
-									class="control-label" style="color: red" for="inputError" th:errors="*{name}">名前を入力してください</label>
+								<label for="inputName">商品名:</label><label
+									class="control-label" style="color: red" for="inputError" th:errors="*{name}">商品名を入力してください</label>
 								<input type="text" id="inputName" class="form-control"
-									placeholder="ピザタロウ" th:field="*{name}">
+									placeholder="商品名" th:field="*{name}">
 							</div>
 							<div class="form-group">
-								<label for="inputEmail">メールアドレス:</label><label
-									class="control-label" style="color: red" for="inputError" th:errors="*{email}">メールアドレスを入力してください</label>
-								<input type="text" id="inputEmail" class="form-control"
-									placeholder="pizza@ppp.com" th:field="*{email}">
+								<label for="inputDescription">商品説明:</label><label
+									class="control-label" style="color: red" for="inputError" th:errors="*{description}">商品説明を入力してください</label>
+								<textarea id="inputDescription" class="form-control"
+									placeholder="商品説明" th:field="*{description}"></textarea>
 							</div>
 							<div class="form-group">
-								<label for="inputZipcode">郵便番号（ハイフン無し）:</label>
+								<label for="inputPriceM">価格（Mサイズ）:</label>
 								<label
-									class="control-label" style="color: red" for="inputError" th:errors="*{zipcode}">郵便番号を入力してください</label>
-									<input type="button" value="住所検索">
-								<input type="text" id="inputZipcode" class="form-control"
-									placeholder="0001111" th:field="*{zipcode}">
+									class="control-label" style="color: red" for="inputError" th:errors="*{priceM}">価格（M）を入力してください</label>
+								<input type="text" id="inputPriceM" class="form-control"
+									placeholder="価格（Mサイズ）" th:field="*{priceM}">
 								
 							</div>
 							<div class="form-group">
-								<label for="inputAddress">住所:</label>
+								<label for="inputPriceL">価格（Lサイズ）:</label>
 								<label
-									class="control-label" style="color: red" for="inputError" th:errors="*{address}">住所を入力してください</label>
-								<input type="text" id="inputAddress" class="form-control"
-									placeholder="住所" th:field="*{address}">
+									class="control-label" style="color: red" for="inputError" th:errors="*{priceL}">価格（L）を入力してください</label>
+								<input type="text" id="inputPriceL" class="form-control"
+									placeholder="価格（Lサイズ）" th:field="*{priceL}">
 							</div>
 							<div class="form-group">
-								<label for="inputTel">電話番号（ハイフン無し）:</label>
+								<label for="inputImage">商品画像:</label>
 								<label
-									class="control-label" style="color: red" for="inputError" th:errors="*{telephone}">電話番号を入力してください</label>
-								<input type="text" id="inputTel" class="form-control"
-									placeholder="00011112222" th:field="*{telephone}">
+									class="control-label" style="color: red" for="inputError" th:errors="*{imageFile}">画像を選択してください</label>
+								<input type="file" accept=".jpg,.png,image/jpeg,image/png" id="inputImage" class="form-control"
+									placeholder="商品画像" th:field="*{imageFile}">
 							</div>
 							<div class="form-group">
-								<label for="inputPassword">パスワード:</label>
-								<label
-									class="control-label" style="color: red" for="inputError" th:errors="*{password}">パスワードを入力してください</label>
-								<input type="password" id="inputPassword" class="form-control"
-									placeholder="パスワード" th:field="*{password}">
-							</div>
-							<div class="form-group">
-								<label for="inputConfirmationPassword">確認用パスワード:</label>
-								<label
-									class="control-label" style="color: red" for="inputError" th:errors="*{confirmPassword}">確認用パスワードを入力してください</label>
-								<input type="password" id="inputConfirmationPassword" class="form-control"
-									placeholder="確認用パスワード" th:field="*{confirmPassword}">
-							</div>
-							<div class="form-group text-center">
-								<button type="submit" class="btn btn-primary btn-lg">更新する</button>
+								<button type="submit" class="btn btn-primary">登録</button>
+								<button type="reset" class="btn btn-primary">クリア</button>
 							</div>
 						</fieldset>
 					</form>

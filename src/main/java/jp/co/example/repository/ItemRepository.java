@@ -3,11 +3,15 @@ package jp.co.example.repository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.domain.Item;
@@ -30,7 +34,7 @@ public class ItemRepository {
 	public List<Item> findAll() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,name,description,price_m,price_l,image_path,deleted");
-		sql.append(" FROM items ORDER BY id;");
+		sql.append(" FROM items ORDER BY id DESC;");
 		List<Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
 		return itemList;
 	}
@@ -125,6 +129,39 @@ public class ItemRepository {
 		}
 		return itemList;
 	}
+	
+	/**
+	 * 新商品を登録します.
+	 * @param item 商品情報
+	 * @return　新商品情報
+	 */
+	 synchronized public Item insert(Item item) {
+		item.setId(getPrimaryId());
+		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+		StringBuilder insertSql = new StringBuilder();
+		insertSql.append("INSERT INTO items(id,name,description,price_m,price_l,image_path)");
+		insertSql.append(" VALUES(:id,:name,:description,:priceM,:priceL,:imagePath);");
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		String[] keyColumnNames = { "id" };
+		template.update(insertSql.toString(), param, keyHolder, keyColumnNames);
+		item.setId(keyHolder.getKey().intValue());
+		return item;
+	}
+	 
+		/**
+		 * 商品テーブルの中で一番大きいID＋1（プライマリーキー）を取得する.
+		 * @return テーブル内で一番値が大きいID+1.データがない場合はi
+		 */
+		private Integer getPrimaryId() {
+			try {
+				Integer maxId = template.queryForObject("SELECT MAX(id) FROM items;", new MapSqlParameterSource(),
+						Integer.class);
+				return maxId + 1;
+			} catch (DataAccessException e) {
+				// データが存在しない場合
+				return 1;
+			}
+		} 
 	
 	
 
