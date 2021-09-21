@@ -45,10 +45,8 @@
 						<a href="cart_list.html" class="navbar-link"
 							th:href="@{/order/showCart}">ショッピングカート</a>&nbsp;&nbsp; <a
 							href="order_history.html" th:href="@{/order/toOrderhistory}"
-							class="navbar-link">注文履歴</a>&nbsp;&nbsp; <a href="login.html"
-							th:href="@{/user/toLogin}" class="navbar-link">ログイン</a>&nbsp;&nbsp;
-						<a href="item_list_pizza.html" th:href="@{user/logout}"
-							class="navbar-link">ログアウト</a>
+							class="navbar-link">注文履歴</a>&nbsp;&nbsp;<span th:if="${session.user == null}"><a href="login.html" th:href="@{/user/toLogin}" class="navbar-link">ログイン</a></span>&nbsp;&nbsp;
+						<span th:if="${session.user != null}"><a href="item_list_pizza.html" th:href="@{user/logout}" class="navbar-link">ログアウト</a></span>
 					</p>
 				</div>
 				<!-- /.navbar-collapse -->
