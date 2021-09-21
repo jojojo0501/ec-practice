@@ -81,13 +81,14 @@ public class ItemService {
 		}
 		return itemList;
 	}
-	
+
 	/**
 	 * 商品を追加します.
+	 * 
 	 * @param form 入力情報
 	 * @return 追加した商品
 	 */
-	public Item registerItem(RegisterItemForm form,String fileExtension) throws IOException {
+	public Item registerItem(RegisterItemForm form, String fileExtension) throws IOException {
 		Item item = new Item();
 		BeanUtils.copyProperties(form, item);
 		item.setPriceM(Integer.parseInt(form.getPriceM()));
@@ -101,6 +102,21 @@ public class ItemService {
 		}
 		item.setImagePath(base64FileString);
 		return itemRepository.insert(item);
+	}
+
+	/**
+	 * 商品テーブルの削除フラグを更新します.
+	 * @param itemId 商品ID
+	 * @param deleteFlg　削除フラグ
+	 */
+	public void updateDeleteFlg(Integer itemId, Boolean deleteFlg) {
+		Item item = itemRepository.load(itemId);
+		if (deleteFlg) {
+			item.setDeleted(true);
+		} else {
+			item.setDeleted(false);
+		}
+		itemRepository.updateDeleteFlg(item);
 	}
 
 }

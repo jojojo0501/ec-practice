@@ -164,9 +164,9 @@ public class ItemRepository {
 		} 
 		
 		/**
-		 * 商品を削除する(論理削除).
+		 * 商品をのdeleteフラグを更新する(論理削除).
 		 * 
-		 * @param Order 更新する注文情報
+		 * @param Item 更新する商品情報
 		 */
 		public void updateDeleteFlg(Item item) {
 			StringBuilder sql = new StringBuilder();
