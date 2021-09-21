@@ -18,7 +18,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jp.co.example.controller.OrderController;
 import jp.co.example.domain.Item;
 import jp.co.example.domain.Order;
 import jp.co.example.domain.OrderItem;
@@ -171,8 +170,8 @@ public class OrderService {
 				order.setStatus(Status.DEPOSITED.getKey());
 			}
 			orderRepository.update(order);
-//			String content = createContent(order);
-//			sendMail(order.getDestinationEmail(), content);
+			String content = createContent(order);
+			sendMail(order.getDestinationEmail(), content);
 		} catch (java.text.ParseException pe) {
 			pe.printStackTrace();
 			return false;
