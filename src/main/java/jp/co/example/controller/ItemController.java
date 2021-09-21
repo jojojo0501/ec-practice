@@ -175,5 +175,31 @@ public class ItemController {
 		}
 		return originalFileName.substring(point + 1);
 	}
+	
+	/**
+	 * 管理者用商品詳細画面を表示します.
+	 * @param id 商品ID
+	 * @param model　商品情報をリクエストスコープに格納します.
+	 * @return　商品詳細ページへフォワードします。
+	 */
+	@RequestMapping("/admin-detail")
+	public String showAdminDetail(Integer id, Model model) {
+		Item item = itemService.showDetail(id);
+		item.setToppingList(toppingService.searchAll());
+		model.addAttribute("item", item);
+		return "admin_item_detail";
+	}
+	
+	/**
+	 * 商品の削除フラグを更新します.
+	 * @param itemId 商品ID
+	 * @param deleted　削除フラグ
+	 * @return 商品一覧ページへリダイレクト
+	 */
+	@RequestMapping("/update")
+	public String updateDeleteFlg(Integer itemId,Boolean deleted) {
+		itemService.updateDeleteFlg(itemId, deleted);
+		return "redirect:/admin";
+	}
 
 }
