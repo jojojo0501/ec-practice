@@ -1,5 +1,8 @@
 package jp.co.example.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -13,9 +16,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.domain.AdminUser;
+import jp.co.example.domain.Item;
 import jp.co.example.form.LoginAdminUserForm;
 import jp.co.example.form.RegisterAdminUserForm;
 import jp.co.example.service.AdminUserService;
+import jp.co.example.service.ItemService;
 
 /**
  * 管理者を操作するコントローラークラス.
@@ -29,6 +34,9 @@ public class AdminUserController {
 
 	@Autowired
 	private AdminUserService adminUserService;
+	
+	@Autowired
+	private ItemService itemService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -114,6 +122,16 @@ public class AdminUserController {
 			return "redirect:/admin";
 		}
 	}
+	
+	/**
+	 * ログアウトします.
+	 * @return 商品一覧ページへリダイレクトします。
+	 */
+	@RequestMapping("/logout")
+	public String logout() {
+		session.invalidate();
+		return "redirect:/";
+	}
 
 	/**
 	 * 管理者用商品一覧ページへ遷移します.
@@ -121,7 +139,24 @@ public class AdminUserController {
 	 * @return 管理者一覧ページへフォワードします。
 	 */
 	@RequestMapping("")
-	public String index() {
+	public String index(Model model) {
+		int count = 0;
+		List<Item> itemList = itemService.searchAllItem();
+		List<List<Item>> wrapperItemList = new ArrayList<>();
+		List<Item> threeItemList = new ArrayList<>();
+		for (Item item : itemList) {
+			threeItemList.add(item);
+			count++;
+			if (count % 3 == 0) {
+				wrapperItemList.add(threeItemList);
+				threeItemList = new ArrayList<>();
+			}
+		}
+		if (count % 3 != 0) {
+			wrapperItemList.add(threeItemList);
+		}
+		model.addAttribute("itemList", itemList);
+		model.addAttribute("wrapperItemList", wrapperItemList);
 		return "admin_item_list_pizza";
 	}
 
