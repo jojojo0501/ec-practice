@@ -11,9 +11,21 @@ create table users (
  , telephone varchar(15) not null
 ) ;
 
+--　管理者
+DROP TABLE IF EXISTS admin_users;
+
+create table admin_users (
+  id serial not null
+  , name varchar(100) not null
+  , email varchar(100) not null unique
+  , password text not null
+) ;
+
 
 --ユーザー登録(pass:morimori)
 insert into users(name, email, password, zipcode, address, telephone) values('テストユーザ', 'test@test.co.jp', '$2a$10$Utoo6nr3XIFEh4xOZ9Zr1.n/PtEYBb8HhlLDDklaJwsj.T3uux4kq','1111111', 'テスト住所', 'テスト電話番号');
+--管理者登録(pass:morimori)
+insert into admin_users(name, email, password) values('テストユーザ', 'test@test.co.jp', '$2a$10$Utoo6nr3XIFEh4xOZ9Zr1.n/PtEYBb8HhlLDDklaJwsj.T3uux4kq');
 
 -- 商品
 drop table if exists items cascade;
