@@ -162,6 +162,18 @@ public class ItemRepository {
 				return 1;
 			}
 		} 
+		
+		/**
+		 * 商品を削除する(論理削除).
+		 * 
+		 * @param Order 更新する注文情報
+		 */
+		public void updateDeleteFlg(Item item) {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE items SET deleted=:deleted WHERE id=:id");
+			SqlParameterSource param = new MapSqlParameterSource().addValue("id", item.getId()).addValue("deleted", item.getDeleted());
+			template.update(sql.toString(), param);
+		}
 	
 	
 
