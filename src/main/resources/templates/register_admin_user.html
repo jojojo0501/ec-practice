@@ -28,12 +28,6 @@
 					<a class="navbar-brand" href="item_list_pizza.html" th:href="@{/}"> <!-- 企業ロゴ --> <img
 						alt="main log" th:src="@{/img_pizza/header_logo.png}" height="35">
 					</a>
-					<a th:if="${session.user != null}" class="navbar-brand" href="item_list_pizza.html" th:href="@{/user/toUpdate}" style="font-size:15px;">
-					<span th:text="${session.user.name}+さんこんにちは！"></span>
-					</a>
-					<a th:unless="${session.user != null}" th:href="@{/user/toLogin}" class="navbar-brand" style="font-size:15px;">
-					<span th:text="ゲストさんこんにちは！"></span>
-					</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -52,25 +46,38 @@
 		<div class="row">
 			<div class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
 				<div class="well">
-					<form method="post" action="item_list_pizza.html" th:action="@{/user/login}" th:object="${loginForm}">
+					<form method="post" action="item_list_pizza.html" th:action="@{/admin/insert}" th:object="${registerAdminUserForm}">
 						<fieldset>
-							<legend>
-								ログイン
-							</legend>
-							<label th:if="${loginErrorMessage != null}"
-									class="control-label" style="color: red" for="inputError" th:text="${loginErrorMessage}"></label>
+							<legend>管理者登録</legend>
 							<div class="form-group">
-								<label for="inputEmail">メールアドレス:</label>
+								<label for="inputName">名前:</label><label
+									class="control-label" style="color: red" for="inputError" th:errors="*{name}">名前を入力してください</label>
+								<input type="text" id="inputName" class="form-control"
+									placeholder="ピザタロウ" th:field="*{name}">
+							</div>
+							<div class="form-group">
+								<label for="inputEmail">メールアドレス:</label><label
+									class="control-label" style="color: red" for="inputError" th:errors="*{email}">メールアドレスを入力してください</label>
 								<input type="text" id="inputEmail" class="form-control"
-									placeholder="Email" th:field="*{email}">
+									placeholder="pizza@ppp.com" th:field="*{email}">
 							</div>
 							<div class="form-group">
 								<label for="inputPassword">パスワード:</label>
+								<label
+									class="control-label" style="color: red" for="inputError" th:errors="*{password}">パスワードを入力してください</label>
 								<input type="password" id="inputPassword" class="form-control"
-									placeholder="Password" th:field="*{password}">
+									placeholder="パスワード" th:field="*{password}">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-primary">ログイン</button>
+								<label for="inputConfirmationPassword">確認用パスワード:</label>
+								<label
+									class="control-label" style="color: red" for="inputError" th:errors="*{confirmPassword}">確認用パスワードを入力してください</label>
+								<input type="password" id="inputConfirmationPassword" class="form-control"
+									placeholder="確認用パスワード" th:field="*{confirmPassword}">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">登録</button>
+								<button type="reset" class="btn btn-primary">クリア</button>
 							</div>
 						</fieldset>
 					</form>
@@ -78,17 +85,6 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="text-center">
-				<a href="register_user.html" th:href="@{/user/register}">ユーザ登録はこちら</a>
-			</div>
-		</div>
-		<div class="row" style="margin-top:20px;">
-			<div class="text-center">
-				<a th:href="@{/admin/toLogin}">管理者の方はこちら</a>
-			</div>
-		</div>
-		
 	</div>
 	<!-- end container -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
