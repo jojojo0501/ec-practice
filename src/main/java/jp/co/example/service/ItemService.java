@@ -28,6 +28,15 @@ public class ItemService {
 		List<Item> itemList = itemRepository.findAll();
 		return itemList;
 	}
+	/**
+	 * 全商品を検索します.
+	 * 
+	 * @return 全商品が格納されたリスト
+	 */
+	public List<Item> adminSearchAllItem() {
+		List<Item> itemList = itemRepository.adminFindAll();
+		return itemList;
+	}
 
 	/**
 	 * 商品を主キー検索します.
@@ -37,6 +46,15 @@ public class ItemService {
 	 */
 	public Item showDetail(Integer itemId) {
 		return itemRepository.load(itemId);
+	}
+	/**
+	 * 商品を主キー検索します.
+	 * 
+	 * @param itemId 主キー検索する商品Id
+	 * @return 商品情報
+	 */
+	public Item adminShowDetail(Integer itemId) {
+		return itemRepository.adminLoad(itemId);
 	}
 
 	/**
@@ -110,7 +128,7 @@ public class ItemService {
 	 * @param deleteFlg　削除フラグ
 	 */
 	public void updateDeleteFlg(Integer itemId, Boolean deleteFlg) {
-		Item item = itemRepository.load(itemId);
+		Item item = itemRepository.adminLoad(itemId);
 		if (deleteFlg) {
 			item.setDeleted(true);
 		} else {

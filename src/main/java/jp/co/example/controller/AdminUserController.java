@@ -141,7 +141,7 @@ public class AdminUserController {
 	@RequestMapping("")
 	public String index(Model model) {
 		int count = 0;
-		List<Item> itemList = itemService.searchAllItem();
+		List<Item> itemList = itemService.adminSearchAllItem();
 		List<List<Item>> wrapperItemList = new ArrayList<>();
 		List<Item> threeItemList = new ArrayList<>();
 		for (Item item : itemList) {

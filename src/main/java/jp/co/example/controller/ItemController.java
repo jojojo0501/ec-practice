@@ -184,7 +184,7 @@ public class ItemController {
 	 */
 	@RequestMapping("/admin-detail")
 	public String showAdminDetail(Integer id, Model model) {
-		Item item = itemService.showDetail(id);
+		Item item = itemService.adminShowDetail(id);
 		item.setToppingList(toppingService.searchAll());
 		model.addAttribute("item", item);
 		return "admin_item_detail";
