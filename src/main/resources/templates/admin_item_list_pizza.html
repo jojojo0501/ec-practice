@@ -12,7 +12,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
+<body id="admin-back-ground">
 	<div class="container">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
@@ -50,57 +50,21 @@
 			<!-- /.container-fluid -->
 		</nav>
 
-		<!-- search form -->
-		<div class="row">
-			<div
-				class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="panel-title">商品を検索する</div>
-					</div>
-					<div class="panel-body">
-						<form method="post" action="#" th:action="@{/search}" class="form-horizontal">
-							<div class="form-group">
-								<div th:if="${ItemMessage != null}" th:text="${ItemMessage}" class="text-center" style="color:red;"></div>
-								<label for="code" class="control-label col-sm-2">商品名</label>
-								<div class="col-sm-9">
-									<input type="text" name="name" id="code"
-										class="form-control input-sm" autocomplete="name" list="itemListForAutoComplete" />
-										<dataList id="itemListForAutoComplete">
-											<option th:each="item:${itemList}" th:value="${item.name}"></option>
-										</dataList>
-								</div>
-							</div>
-							<div class="text-center">
-								<button type="submit" value="検索" class="btn btn-primary search-button">検索</button>
-								<button type="reset" value="クリア" class="btn btn-default search-button">クリア</button>
-								<select name="searchOrderNum" class="search-select">
-									<option value="0">---</option>
-									<option value="1">金額昇順</option>
-									<option value="2">金額降順</option>
-								</select>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<!-- table -->
 		<div class="row">
 			<div
 				class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
-				<table class="table table-striped item-list-table">
+				<table class="table item-list-table">
 					<tbody class="paging-containter">
 						<tr th:each="threeItemList:${wrapperItemList}">
 							<th th:each="item:${threeItemList}">
-								<a href="item_detail.html" th:href="@{/detail?id=}+${item.id}">
+								<a href="item_detail.html" th:href="@{/admin-detail?id=}+${item.id}">
 									<span th:if="${item.id <= 18}"><img src="../static/img_pizza/1.jpg" th:src="@{/img_pizza/}+${item.imagePath}"
 										class="img-responsive img-rounded item-img-center" width="200" height="600"></span>
 									<span th:unless="${item.id <= 18}"><img src="../static/img_pizza/1.jpg" th:src="${item.imagePath}"
 										class="img-responsive img-rounded item-img-center" width="200" height="600"></span>
 								</a><br>
-								<a href="item_detail.html" th:href="@{/detail?id=}+${item.id}" th:text="${item.name}">じゃがバターベーコン</a><br>
+								<a href="item_detail.html" th:href="@{/admin-detail?id=}+${item.id}" th:text="${item.name}">じゃがバターベーコン</a><br>
 								<span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${#numbers.formatInteger(item.priceM,2,'COMMA')}">1,380</span>円(税抜)<br>
 								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${#numbers.formatInteger(item.priceL,2,'COMMA')}">2,380</span>円(税抜)<br>
 							</th>
